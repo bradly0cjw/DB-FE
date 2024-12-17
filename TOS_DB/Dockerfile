@@ -9,14 +9,8 @@ ENV MYSQL_PASSWORD=dbpassword
 # Copy the SQL script to the Docker container
 COPY createtable.sql /docker-entrypoint-initdb.d/
 
-# Copy the healthcheck script to the Docker container
-COPY healthcheck.sh /usr/local/bin/healthcheck.sh
-
-# Grant execute permission to the healthcheck script
-RUN chmod +x /usr/local/bin/healthcheck.sh
+# Copy custom MariaDB configuration file to the Docker container
+COPY my.cnf /etc/mysql/my.cnf
 
 # Expose the default MariaDB port
 EXPOSE 3306
-
-# Run the healthcheck script in the background
-CMD ["sh", "-c", "/usr/local/bin/healthcheck.sh & docker-entrypoint.sh mysqld"]
