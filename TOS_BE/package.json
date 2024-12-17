@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "mysql2": "^3.11.5",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },

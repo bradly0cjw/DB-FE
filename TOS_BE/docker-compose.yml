@@ -1,8 +1,8 @@
 services:
   app:
-    container_name: tos-be-app
+    container_name: backend
     build:
-      context: ./TOS_BE
+      context: .
       dockerfile: ./Dockerfile
     ports:
       - "3000:3000"

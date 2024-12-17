@@ -5,7 +5,7 @@ services:
     build:
       context: ./TOS_BE
       dockerfile: Dockerfile
-    container_name: tos-be-app
+    container_name: backend
     ports:
       - "3000:3000"
     volumes:
@@ -19,28 +19,33 @@ services:
     build:
       context: ./TOS_FE
       dockerfile: Dockerfile
-    container_name: tos-fe-web
+    container_name: frontend
     ports:
       - "8080:80"
     networks:
       - cont_network
 
-  # database:
-  #   image: postgres:latest
-  #   container_name: tos-db
-  #   environment:
-  #     POSTGRES_USER: youruser
-  #     POSTGRES_PASSWORD: yourpassword
-  #     POSTGRES_DB: yourdb
-  #   volumes:
-  #     - db_data:/var/lib/postgresql/data
-  #   networks:
-  #     - cont_network
+  database:
+    build:
+      context: ./TOS_DB
+      dockerfile: Dockerfile
+    container_name: database
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: dbproj
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - cont_network
 
 networks:
   cont_network:
-    external: true
-    # driver: bridge
+    # external: true
+    driver: bridge
 
-# volumes:
-#   db_data:
+volumes:
+  db_data:

@@ -1,0 +1,22 @@
+database:
+  build:
+    container_name: database
+    context: .
+    dockerfile: ./Dockerfile
+  container_name: tos-db
+  environment:
+    MYSQL_ROOT_PASSWORD: rootpassword
+    MYSQL_DATABASE: dbproj
+    MYSQL_USER: dbuser
+    MYSQL_PASSWORD: dbpassword
+  ports:
+    - "3306:3306"
+  volumes:
+    - db_data:/var/lib/mysql
+  networks:
+    - cont_network
+
+networks:
+  cont_network:
+    external: true
+    # driver: bridge

@@ -1,8 +1,8 @@
 services:
   web:
-    container_name: tos-fe-web
+    container_name: frontend
     build: 
-      context: ./TOS_FE
+      context: .
       dockerfile: ./Dockerfile
     ports:
       - "8080:80"

@@ -16,7 +16,6 @@ router.get('/ping', (req, res) => {
   res.send('pong');
 });
 
-
 /**
  * @swagger
  * /users:
@@ -35,9 +34,16 @@ router.get('/ping', (req, res) => {
  *                   id:
  *                     type: integer
  *                     example: 1
- *                   name:
+ *                   username:
  *                     type: string
- *                     example: John Doe
+ *                     example: JohnDoe
+ *                   email:
+ *                     type: string
+ *                     example: johndoe@example.com
+ *                   created_at:
+ *                     type: string
+ *                     format: date-time
+ *                     example: 2023-10-01T12:00:00Z
  */
 router.get('/users', getUsers);
 
@@ -53,9 +59,15 @@ router.get('/users', getUsers);
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               username:
  *                 type: string
- *                 example: John Doe
+ *                 example: JohnDoe
+ *               email:
+ *                 type: string
+ *                 example: johndoe@example.com
+ *               password:
+ *                 type: string
+ *                 example: password123
  *     responses:
  *       201:
  *         description: User created successfully
@@ -67,9 +79,16 @@ router.get('/users', getUsers);
  *                 id:
  *                   type: integer
  *                   example: 162738495
- *                 name:
+ *                 username:
  *                   type: string
- *                   example: John Doe
+ *                   example: JohnDoe
+ *                 email:
+ *                   type: string
+ *                   example: johndoe@example.com
+ *                 created_at:
+ *                   type: string
+ *                   format: date-time
+ *                   example: 2023-10-01T12:00:00Z
  */
 router.post('/users', createUser);
 

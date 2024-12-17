@@ -1,14 +1,16 @@
 -- DROP DATABASE dbproj;
 -- CREATE DATABASE dbproj;
+CREATE DATABASE if not exists dbproj;
+
+USE dbproj;
 
 CREATE TABLE users (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP NOT NULL
 );
-
 
 CREATE TABLE sellers (
     user_id INTEGER PRIMARY KEY,
@@ -29,7 +31,7 @@ CREATE TABLE customers (
 );
 
 CREATE TABLE events (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     event_name VARCHAR(255) NOT NULL,
     event_date DATE NOT NULL,
     status VARCHAR(50) NOT NULL,
@@ -41,7 +43,7 @@ CREATE TABLE events (
 );
 
 CREATE TABLE tickets (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     seller_id INTEGER,
     event_id INTEGER,
     ticket_name VARCHAR(255) NOT NULL,
@@ -56,9 +58,8 @@ CREATE TABLE tickets (
     FOREIGN KEY (event_id) REFERENCES events(id)
 );
 
-
 CREATE TABLE discounts (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     seller_id INTEGER,
     discount_type VARCHAR(50) NOT NULL,
     discount_value DECIMAL(10, 2) NOT NULL,
@@ -67,19 +68,16 @@ CREATE TABLE discounts (
     FOREIGN KEY (seller_id) REFERENCES sellers(user_id)
 );
 
-
 CREATE TABLE ticket_discounts (
     discount_id INTEGER,
     ticket_id INTEGER,
-
     PRIMARY KEY (discount_id, ticket_id),
     FOREIGN KEY (discount_id) REFERENCES discounts(id),
     FOREIGN KEY (ticket_id) REFERENCES tickets(id)
 );
 
-
 CREATE TABLE orders (
-    id INTEGER PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTO_INCREMENT,
     customer_id INTEGER,
     seller_id INTEGER,
     order_date TIMESTAMP NOT NULL,
@@ -87,7 +85,6 @@ CREATE TABLE orders (
     FOREIGN KEY (customer_id) REFERENCES customers(user_id),
     FOREIGN KEY (seller_id) REFERENCES sellers(user_id)
 );
-
 
 CREATE TABLE order_discounts (
     discount_id INTEGER,
