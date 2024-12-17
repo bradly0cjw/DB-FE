@@ -1,35 +1,18 @@
 const express = require('express');
-const swaggerUi = require('swagger-ui-express');
-const swaggerJsdoc = require('swagger-jsdoc');
+const { swaggerUi, specs } = require('./swagger');
+const routes = require('./routes');
 const app = express();
 const port = 3000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-// Swagger setup
-const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Ticket Order System API',
-      version: '1.0.0',
-    },
-  },
-  apis: ['./src/routes/*.js'], // Path to the API docs
-};
-
-const specs = swaggerJsdoc(options);
-
 // Use Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
-// Import routes
-const routes = require('./routes');
-
-// Redirect root URL to /home
+// Redirect root URL to /api-docs
 app.get('/', (req, res) => {
-  res.redirect('./api-docs');
+  res.redirect('/api-docs');
 });
 
 // Use routes
