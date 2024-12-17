@@ -44,8 +44,8 @@ services:
 
 networks:
   cont_network:
-    # external: true
-    driver: bridge
+    external: true
+    # driver: bridge
 
 volumes:
   db_data:
