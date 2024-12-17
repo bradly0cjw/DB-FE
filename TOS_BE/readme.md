@@ -24,7 +24,7 @@ TOS_BE
 
 1. **Clone the repository:**
    ```
-   git clone <repository-url>
+   git clone https://github.com/bradly0cjw/DB_FE.git
    cd backend-app
    ```
 
@@ -51,7 +51,3 @@ TOS_BE
   - `GET /users` - Retrieves a list of users.
   - `POST /users` - Creates a new user.
   - `GET /ping` - Simple ping endpoint.
-
-## License
-
-This project is licensed under the MIT License.

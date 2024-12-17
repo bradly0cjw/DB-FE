@@ -1,92 +1,75 @@
-# DB-FE
 Database Final Project  
 
 # [Click me to visit site status](https://status.cypone.dev/status/tos)
 # [Click me to visit API document](https://api.cypone.dev)
 # [Click me to visit site](https://ticket.cypone.dev)
 
+## Project Overview
 
-## TOS_FE
-Ticket Order System FrontEnd
+This repository contains the final project for the Database course. The project is a Ticket Order System, which includes a backend, frontend, and database components.
 
-### Project Structure
+### Components
 
-```
-TOS_FE
-├── src
-│   ├── App.vue           # Main Vue component
-│   ├── assets            # Static assets
-│   ├── components        # Vue components
-│   └── main.js           # Entry point of the application
-├── Dockerfile            # Dockerfile for building the application image
-├── docker-compose.yaml   # Docker Compose configuration
-├──index.html             # Main HTML file
-├── package.json          # npm configuration file
-├── README.md             # Project documentation
-└── vite.config.js        # Vite configuration
-```
+1. **Backend (TOS_BE)**:
+   - Built with Node.js and Express.
+   - Containerized using Docker and orchestrated with Docker Compose.
+   - Provides RESTful API endpoints for managing users and tickets.
+   - [Backend Documentation](TOS_BE/README.md)
 
-### Setup Instructions
+2. **Frontend (TOS_FE)**:
+   - Built with Vue.js and Vite.
+   - Containerized using Docker and orchestrated with Docker Compose.
+   - Provides a user interface for interacting with the Ticket Order System.
+   - [Frontend Documentation](TOS_FE/README.md)
 
-1. **Clone the repository:**
-   ```sh
-   git clone <repository-url>
-   cd TOS_FE
-   ```
-
-2. **Install dependencies:**
-   ```sh
-   npm install
-   ```
-
-3. **Build the Docker image:**
-   ```sh
-   docker build -t frontend-app .
-   ```
-
-4. **Run the application using Docker Compose:**
-   ```sh
-   docker-compose up
-   ```
-
-### Usage
-
-- The application runs on `http://localhost:8080`.
-
-## TOS_BE
-Ticket Order System BackEnd
+3. **Database (TOS_DB)**:
+   - Contains the database schema and setup instructions.
+   - [Database Documentation](TOS_DB/README.md)
 
 ### Project Structure
 
 ```
-TOS_BE
-├── src
-│   ├── index.js          # Entry point of the application
-│   ├── controllers       # Contains business logic for routes
-│   ├── routes            # Defines application routes
-│   └── models            # Data models and schemas
-├── Dockerfile            # Dockerfile for building the application image
-├── docker-compose.yml    # Docker Compose configuration
-├── package.json          # npm configuration file
-└── README.md             # Project documentation
+DB_FE/
+├── TOS_BE/
+│   ├── README.md
+│   ├── src/
+│   ├── package.json
+│   └── ...
+├── TOS_FE/
+│   ├── README.md
+│   ├── src/
+│   ├── package.json
+│   └── ...
+├── TOS_DB/
+│   ├── README.md
+│   ├── schema.sql
+│   └── ...
+├── docker-compose.yml
+└── README.md
 ```
 
 ### Setup Instructions
 
+To set up the entire project, follow these steps:
+
 1. **Clone the repository:**
    ```sh
-   git clone <repository-url>
+   git clone https://github.com/bradly0cjw/DB_FE.git
+   cd DB_FE
+   ```
+
+2. **Install dependencies for backend and frontend:**
+   ```sh
    cd TOS_BE
-   ```
-
-2. **Install dependencies:**
-   ```sh
    npm install
+   cd ../TOS_FE
+   npm install
+   cd ..
    ```
 
-3. **Build the Docker image:**
+3. **Build the Docker images:**
    ```sh
-   docker build -t backend-app .
+   docker-compose build
    ```
 
 4. **Run the application using Docker Compose:**
@@ -96,23 +79,11 @@ TOS_BE
 
 ### Usage
 
-- The application runs on `http://localhost:3000`.
-- You can access the following endpoints:
-  - `GET /` - Redirects to the ticket service.
-  - `GET /users` - Retrieves a list of users.
-  - `POST /users` - Creates a new user.
-  - `GET /ping` - Simple ping endpoint.
+- The backend application runs on `http://localhost:3000`.
+- The frontend application runs on `http://localhost:8080`.
 
-## TOS_DB
-Ticket Order System DataBase
+### Additional Resources
 
-### Project Structure
-
-```
-TOS_DB
-├── readme.md             # Project documentation
-```
-
-## License
-
-<!-- This project is licensed under the MIT License. -->
+- [Project Status](https://status.cypone.dev/status/tos)
+- [API Documentation](https://api.cypone.dev)
+- [Live Site](https://ticket.cypone.dev)

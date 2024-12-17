@@ -1,29 +1,46 @@
-# untitled
+## TOS_FE
+Ticket Order System FrontEnd
 
-This template should help get you started developing with Vue 3 in Vite.
+### Project Structure
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```
+TOS_FE
+├── src
+│   ├── App.vue           # Main Vue component
+│   ├── assets            # Static assets
+│   ├── components        # Vue components
+│   └── main.js           # Entry point of the application
+├── Dockerfile            # Dockerfile for building the application image
+├── docker-compose.yaml   # Docker Compose configuration
+├──index.html             # Main HTML file
+├── package.json          # npm configuration file
+├── README.md             # Project documentation
+└── vite.config.js        # Vite configuration
 ```
 
-### Compile and Hot-Reload for Development
+### Setup Instructions
 
-```sh
-npm run dev
-```
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/bradly0cjw/DB_FE.git
+   cd TOS_FE
+   ```
 
-### Compile and Minify for Production
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
 
-```sh
-npm run build
-```
+3. **Build the Docker image:**
+   ```sh
+   docker build -t frontend-app .
+   ```
+
+4. **Run the application using Docker Compose:**
+   ```sh
+   docker-compose up
+   ```
+
+### Usage
+
+- The application runs on `http://localhost:8080`.
