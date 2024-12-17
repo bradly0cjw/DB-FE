@@ -13,7 +13,7 @@ services:
   web:
     container_name: tos-fe-web
     build: 
-      context: ./Ticket_Order_System_FE
+      context: ./TOS_FE
       dockerfile: ./Dockerfile
     ports:
       - "8080:80"
