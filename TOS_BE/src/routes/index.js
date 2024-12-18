@@ -92,4 +92,24 @@ router.get('/users', getUsers);
  */
 router.post('/users', createUser);
 
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Deletes a user by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       404:
+ *         description: User not found
+ */
+router.delete('/users/:id', deleteUser);
+
 module.exports = router;

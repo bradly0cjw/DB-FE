@@ -32,7 +32,31 @@ const getUsers = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+
+    const [result] = await connection.query('DELETE FROM users WHERE id = ?', [id]);
+
+    if (result.affectedRows === 0) {
+      throw new Error('User not found');
+    }
+
+    await connection.commit();
+    res.json({ message: 'User deleted successfully' });
+  } catch (error) {
+    await connection.rollback();
+    res.status(500).json({ error: error.message });
+  } finally {
+    connection.release();
+  }
+}
+
 module.exports = {
   createUser,
-  getUsers
+  getUsers,
+  deleteUser
 };
