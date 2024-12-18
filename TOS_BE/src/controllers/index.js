@@ -53,7 +53,7 @@ const deleteUser = async (req, res) => {
   } finally {
     connection.release();
   }
-}
+};
 
 module.exports = {
   createUser,

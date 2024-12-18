@@ -12,6 +12,7 @@ services:
       - ./TOS_BE/src:/usr/src/app/src
     environment:
       NODE_ENV: production
+    restart: always
     networks:
       - cont_network
 
@@ -22,6 +23,7 @@ services:
     container_name: frontend
     ports:
       - "8080:80"
+    restart: always
     networks:
       - cont_network
 
@@ -39,6 +41,7 @@ services:
       - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+    restart: always
     networks:
       - cont_network
 
