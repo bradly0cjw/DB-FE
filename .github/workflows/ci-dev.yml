@@ -13,4 +13,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Call Webhook
-        run: curl -X POST ${{ secrets.CI_WEBHOOK }}
+        run: curl -X POST ${{ secrets.CI_WEBHOOK_DEV }}
