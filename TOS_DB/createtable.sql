@@ -36,7 +36,7 @@ CREATE TABLE events (
     event_date DATE NOT NULL,
     status VARCHAR(50) NOT NULL,
     description TEXT,
-    image_path VARCHAR(255),
+    image_path VARCHAR(255), -- need to be isolated
     seller_id INTEGER,
     created_at TIMESTAMP NOT NULL,
     FOREIGN KEY (seller_id) REFERENCES sellers(user_id)
@@ -44,15 +44,15 @@ CREATE TABLE events (
 
 CREATE TABLE tickets (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    seller_id INTEGER,
+    seller_id INTEGER, -- removed
     event_id INTEGER,
     ticket_name VARCHAR(255) NOT NULL,
-    ticket_date DATE NOT NULL,
+    ticket_date DATE NOT NULL, -- to be discussed
     price DECIMAL(10, 2) NOT NULL,
     status VARCHAR(50) NOT NULL,
     quantity INTEGER NOT NULL,
     description VARCHAR(255),
-    image_path VARCHAR(255),
+    image_path VARCHAR(255), -- to be discussed
     created_at TIMESTAMP NOT NULL,
     FOREIGN KEY (seller_id) REFERENCES sellers(user_id),
     FOREIGN KEY (event_id) REFERENCES events(id)
@@ -65,6 +65,7 @@ CREATE TABLE discounts (
     discount_value DECIMAL(10, 2) NOT NULL,
     start_from TIMESTAMP NOT NULL,
     expired_at TIMESTAMP NOT NULL,
+    -- created_at TIMESTAMP NOT NULL, -- to be discussed
     FOREIGN KEY (seller_id) REFERENCES sellers(user_id)
 );
 
