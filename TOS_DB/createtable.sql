@@ -33,27 +33,32 @@ CREATE TABLE customers (
 CREATE TABLE events (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     event_name VARCHAR(255) NOT NULL,
-    event_date DATE NOT NULL,
+    event_start TIME NOT NULL,
+    event_end TIME NOT NULL,
     status VARCHAR(50) NOT NULL,
     description TEXT,
-    image_path VARCHAR(255), -- need to be isolated
     seller_id INTEGER,
-    created_at TIMESTAMP NOT NULL,
     FOREIGN KEY (seller_id) REFERENCES sellers(user_id)
+);
+
+CREATE TABLE events_images (
+    event_id INTEGER,
+    image_path VARCHAR(255),
+    PRIMARY KEY (event_id, image_path),
+    FOREIGN KEY (event_id) REFERENCES events(id)
 );
 
 CREATE TABLE tickets (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    seller_id INTEGER, -- removed
     event_id INTEGER,
     ticket_name VARCHAR(255) NOT NULL,
-    ticket_date DATE NOT NULL, -- to be discussed
+    ticket_start DATE NOT NULL,
+    ticket_end DATE NOT NULL,
     price DECIMAL(10, 2) NOT NULL,
     status VARCHAR(50) NOT NULL,
     quantity INTEGER NOT NULL,
     description VARCHAR(255),
-    image_path VARCHAR(255), -- to be discussed
-    created_at TIMESTAMP NOT NULL,
+    image_path VARCHAR(255), 
     FOREIGN KEY (seller_id) REFERENCES sellers(user_id),
     FOREIGN KEY (event_id) REFERENCES events(id)
 );
@@ -65,7 +70,6 @@ CREATE TABLE discounts (
     discount_value DECIMAL(10, 2) NOT NULL,
     start_from TIMESTAMP NOT NULL,
     expired_at TIMESTAMP NOT NULL,
-    -- created_at TIMESTAMP NOT NULL, -- to be discussed
     FOREIGN KEY (seller_id) REFERENCES sellers(user_id)
 );
 
