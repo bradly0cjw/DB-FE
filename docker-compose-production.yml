@@ -18,6 +18,7 @@ services:
       DB_USER: 'dbuser'
       DB_PASSWORD: 'dbpassword'
       DB_NAME: 'dbproj'
+      JWT_SECRET: 'your_jwt_secret'
     restart: always
     networks:
       - cont_network

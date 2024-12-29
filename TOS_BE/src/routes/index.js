@@ -1,5 +1,5 @@
 const express = require('express');
-const { createUser, getUsers, deleteUser } = require('../controllers/index');
+const { createUser, getUsers, deleteUser,loginUser } = require('../controllers/index');
 const { getEvents, createEvent, getTicketsByEvent, createTicket } = require('../controllers/event_controller');
 
 const router = express.Router();
@@ -158,4 +158,34 @@ router.get('/events/:eventId/tickets', getTicketsByEvent);
  */
 router.post('/tickets', createTicket);
 
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Logs in a user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *       401:
+ *         description: Invalid email or password
+ */
+router.post('/login', loginUser);
 module.exports = router;

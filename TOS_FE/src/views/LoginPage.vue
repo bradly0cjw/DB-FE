@@ -30,7 +30,8 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        const response = await axios.post('/api/login', {
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const response = await axios.post(`${apiUrl}/login`, {
           email: this.email,
           password: this.password,
         }); // 替換為你的 API 路徑

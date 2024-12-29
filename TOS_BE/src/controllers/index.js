@@ -1,16 +1,31 @@
 const pool = require('../db');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const debug = false;
 
 const createUser = async (req, res) => {
   const { username, email, password } = req.body;
-  const createdAt = new Date();
 
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
 
+    // Get the current time
+    const createdAt = new Date();
+
+    let finalPassword;
+    if (!debug) {
+      // Salt the password with created_at
+      const salt = bcrypt.genSaltSync(10);
+      finalPassword = bcrypt.hashSync(password + createdAt, salt);
+    } else {
+      finalPassword = password;
+    }
+
+    // Insert user
     const [result] = await connection.query(
-      'INSERT INTO users (username, email, password, created_at) VALUES (?, ?, ?, ?)',
-      [username, email, password, createdAt]
+      'INSERT INTO users (username, email, password, created_at) VALUES (?, ?, ?,? )',
+      [username, email, finalPassword, createdAt]
     );
 
     await connection.commit();
@@ -55,8 +70,38 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+    const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [email]);
+    if (rows.length === 0) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    const user = rows[0];
+    const createdAt = user.created_at;
+
+    let isPasswordValid;
+    if (!debug) {
+      // Salt the input password with created_at
+      isPasswordValid = await bcrypt.compare(password + createdAt, user.password);
+    } else {
+      isPasswordValid = password === user.password;
+    }
+
+    const jwtSecret = process.env.JWT_SECRET || 'default_secret';
+
+    const token = jwt.sign({ id: user.id }, jwtSecret, { expiresIn: '1h' });
+    res.json({ token });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createUser,
   getUsers,
-  deleteUser
+  deleteUser,
+  loginUser
 };
