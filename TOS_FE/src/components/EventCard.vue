@@ -1,9 +1,9 @@
 <template>
   <div class="card bg-secondary text-white">
-    <img :src="product.image" class="card-img-top" :alt="product.name" />
+    <img :src="event.image_path || 'default-image-path.jpg'" class="card-img-top" :alt="event.event_name || 'Event Image'" />
     <div class="card-body">
-      <h5 class="card-title">{{ product.name }}</h5>
-      <p class="card-text">{{ product.description }}</p>
+      <h5 class="card-title">{{ event.event_name || 'Event Name' }}</h5>
+      <p class="card-text">{{ event.description || 'No description available.' }}</p>
       <div class="d-flex justify-content-between">
         <button class="btn btn-primary" @click="goToDetail">Detail</button>
         <button class="btn btn-primary" @click="addToCart">Add to Cart</button>
@@ -13,6 +13,7 @@
   </div>
 </template>
 
+<!--
 <script>
 export default {
   name: 'EventCard',
@@ -38,6 +39,7 @@ export default {
   },
 };
 </script>
+-->
 
 <style scoped>
 .event-card {
@@ -60,3 +62,15 @@ button:hover {
   background-color: #0056b3;
 }
 </style>
+    event: {
+      type: Object,
+      required: true,
+      default: () => ({
+        image_path: '',
+        event_name: '',
+        description: ''
+      })
+    },
+  },
+};
+</script>
