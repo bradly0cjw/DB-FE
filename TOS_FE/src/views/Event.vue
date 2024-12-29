@@ -29,7 +29,7 @@ export default {
   methods: {
     async fetchEvents() {
       try {
-        const response = await axios.get('http://localhost:3000/events');
+        const response = await axios.get('http://backend:3000/events');
         this.events = response.data;
         console.log('Events:', this.events);
       } catch (error) {
