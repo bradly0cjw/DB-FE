@@ -1,5 +1,6 @@
 const express = require('express');
-const { createUser, getUsers,deleteUser } = require('../controllers/index');
+const { createUser, getUsers, deleteUser } = require('../controllers/index');
+const { getEvents, createEvent, getTicketsByEvent, createTicket } = require('../controllers/event_controller');
 
 const router = express.Router();
 
@@ -29,21 +30,7 @@ router.get('/ping', (req, res) => {
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                     example: 1
- *                   username:
- *                     type: string
- *                     example: JohnDoe
- *                   email:
- *                     type: string
- *                     example: johndoe@example.com
- *                   created_at:
- *                     type: string
- *                     format: date-time
- *                     example: 2023-10-01T12:00:00Z
+ *                 $ref: '#/components/schemas/User'
  */
 router.get('/users', getUsers);
 
@@ -57,38 +44,14 @@ router.get('/users', getUsers);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *                 example: JohnDoe
- *               email:
- *                 type: string
- *                 example: johndoe@example.com
- *               password:
- *                 type: string
- *                 example: password123
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       201:
  *         description: User created successfully
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                   example: 162738495
- *                 username:
- *                   type: string
- *                   example: JohnDoe
- *                 email:
- *                   type: string
- *                   example: johndoe@example.com
- *                 created_at:
- *                   type: string
- *                   format: date-time
- *                   example: 2023-10-01T12:00:00Z
+ *               $ref: '#/components/schemas/User'
  */
 router.post('/users', createUser);
 
@@ -111,5 +74,88 @@ router.post('/users', createUser);
  *         description: User not found
  */
 router.delete('/users/:id', deleteUser);
+
+/**
+ * @swagger
+ * /events:
+ *   get:
+ *     summary: Retrieves a list of events
+ *     responses:
+ *       200:
+ *         description: A list of events
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Event'
+ */
+router.get('/events', getEvents);
+
+/**
+ * @swagger
+ * /events:
+ *   post:
+ *     summary: Creates a new event
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Event'
+ *     responses:
+ *       201:
+ *         description: Event created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Event'
+ */
+router.post('/events', createEvent);
+
+/**
+ * @swagger
+ * /events/{eventId}/tickets:
+ *   get:
+ *     summary: Retrieves a list of tickets for an event
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The event ID
+ *     responses:
+ *       200:
+ *         description: A list of tickets
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Ticket'
+ */
+router.get('/events/:eventId/tickets', getTicketsByEvent);
+
+/**
+ * @swagger
+ * /tickets:
+ *   post:
+ *     summary: Creates a new ticket
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Ticket'
+ *     responses:
+ *       201:
+ *         description: Ticket created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Ticket'
+ */
+router.post('/tickets', createTicket);
 
 module.exports = router;
