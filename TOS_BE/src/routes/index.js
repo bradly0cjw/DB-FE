@@ -44,7 +44,7 @@ router.get('/users', getUsers);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             $ref: '#/components/schemas/CreateUser'
  *     responses:
  *       201:
  *         description: User created successfully
