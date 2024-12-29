@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { swaggerUi, specs } = require('./swagger');
 const routes = require('./routes');
 const app = express();
@@ -6,6 +7,21 @@ const port = 3000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+// Use CORS middleware
+const API_URL = process.env.API_URL || 'http://localhost:3000';
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost:8080'];
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)|| API_URL === origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'+origin));
+    }
+  },
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true
+}));
 
 // Use Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
