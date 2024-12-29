@@ -29,7 +29,9 @@ export default {
   methods: {
     async fetchEvents() {
       try {
-        const response = await axios.get('http://backend:3000/events');
+        const apiUrl = process.env.VUE_APP_API_URL;
+        console.log('API URL:', apiUrl);
+        const response = await axios.get(`${apiUrl}/events`);
         this.events = response.data;
         console.log('Events:', this.events);
       } catch (error) {

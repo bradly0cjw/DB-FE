@@ -12,6 +12,10 @@ WORKDIR /app
 # # Copy the package.json and package-lock.json files
 COPY package*.json ./
 
+# Set environment variables from Docker Compose
+ARG VUE_APP_API_URL
+ENV VUE_APP_API_URL=${VUE_APP_API_URL}
+
 # Install dependencies
 RUN npm install
 

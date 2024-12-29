@@ -9,8 +9,16 @@ const port = 3000;
 app.use(express.json());
 
 // Use CORS middleware
+const API_URL = process.env.API_URL || 'http://localhost:3000';
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost:8080'];
 app.use(cors({
-  origin: 'http://localhost:8080', // Replace with your frontend's origin
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)|| API_URL === origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'+origin));
+    }
+  },
   methods: 'GET,POST,PUT,DELETE',
   credentials: true
 }));

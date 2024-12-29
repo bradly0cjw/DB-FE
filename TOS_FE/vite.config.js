@@ -8,6 +8,11 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
+  define: {
+    'process.env': {
+      VUE_APP_API_URL: process.env.VUE_APP_API_URL || 'http://localhost:3000'
+    }
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

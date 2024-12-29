@@ -13,10 +13,6 @@ const options = {
         User: {
           type: 'object',
           properties: {
-            id: {
-              type: 'integer',
-              example: 1,
-            },
             username: {
               type: 'string',
               example: 'JohnDoe',
