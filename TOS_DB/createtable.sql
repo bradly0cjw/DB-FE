@@ -33,8 +33,8 @@ CREATE TABLE customers (
 CREATE TABLE events (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     event_name VARCHAR(255) NOT NULL,
-    event_start TIME NOT NULL,
-    event_end TIME NOT NULL,
+    event_start DATE NOT NULL,
+    event_end DATE NOT NULL,
     status VARCHAR(50) NOT NULL,
     description TEXT,
     seller_id INTEGER,
