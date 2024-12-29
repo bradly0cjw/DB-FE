@@ -5,6 +5,7 @@ services:
     build:
       context: ./TOS_BE
       dockerfile: Dockerfile
+      pull_policy: build
     container_name: backend
     ports:
       - "3000:3000"
@@ -26,6 +27,7 @@ services:
     build:
       context: ./TOS_FE
       dockerfile: Dockerfile
+      pull_policy: build
       args:
         VUE_APP_API_URL: 'http://localhost:3000'
     container_name: frontend
@@ -39,6 +41,7 @@ services:
     build:
       context: ./TOS_DB
       dockerfile: Dockerfile
+      pull_policy: build
     container_name: database
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
