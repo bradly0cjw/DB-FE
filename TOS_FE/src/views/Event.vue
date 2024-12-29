@@ -1,35 +1,48 @@
 <template>
-    <div class="container mt-5">
-      <h1 class="text-center">Event List</h1>
-      <div class="row mt-4">
-        <div class="col-md-4" v-for="product in products" :key="product.id">
-          <EventCard :product="product" />
-        </div>
+  <div class="container mt-5">
+    <h1 class="text-center">Event List</h1>
+    <div class="row mt-4">
+      <div class="col-md-4" v-for="event in events" :key="event.id">
+        <EventCard :event="event" />
       </div>
     </div>
-  </template>
-  
-  <script>
-  import products from '@/data/test.json';
-  import EventCard from '@/components/EventCard.vue';
-  
-  export default {
-    name: 'Event',
-    components: {
-      EventCard,
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+import EventCard from '@/components/EventCard.vue';
+
+export default {
+  name: 'Event',
+  components: {
+    EventCard,
+  },
+  data() {
+    return {
+      events: [],
+    };
+  },
+  created() {
+    this.fetchEvents();
+  },
+  methods: {
+    async fetchEvents() {
+      try {
+        const response = await axios.get('http://localhost:3000/events');
+        this.events = response.data;
+        console.log('Events:', this.events);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
     },
-    data() {
-      return {
-        products,
-      };
-    },
-  };
-  </script>
-  
-  <style>
-  body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-  }
-  </style>
-  
+  },
+};
+</script>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+</style>

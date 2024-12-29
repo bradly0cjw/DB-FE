@@ -12,5 +12,13 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
-  }
+  },
+  build: {
+    minify: false,
+    terserOptions: {
+      compress: false,
+      mangle: false,
+    }
+  },
+  manifest: false,
 })
