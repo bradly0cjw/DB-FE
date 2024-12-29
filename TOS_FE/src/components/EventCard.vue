@@ -62,6 +62,10 @@ button:hover {
   background-color: #0056b3;
 }
 </style>
+<script>
+export default {
+  name: 'EventCard',
+  props: {
     event: {
       type: Object,
       required: true,
