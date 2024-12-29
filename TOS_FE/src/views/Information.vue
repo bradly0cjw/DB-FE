@@ -34,7 +34,12 @@
     <!-- 顯示優惠券列表 -->
     <h3>您的優惠券</h3>
     <ul v-if="coupons.length > 0">
-      <li v-for="coupon in coupons" :key="coupon.id">{{ coupon.code }} - {{ coupon.description }}</li>
+      <li v-for="coupon in coupons" :key="coupon.id">
+        <p><strong>{{ coupon.discount_code }}</strong> - {{ coupon.description }}</p>
+        <p>折扣類型: {{ coupon.discount_type }}</p>
+        <p>折扣值: {{ coupon.discount_value }}%</p>
+        <p>有效日期: {{ coupon.start_from }} 至 {{ coupon.expired_at }}</p>
+      </li>
     </ul>
     <p v-else>您目前沒有優惠券。</p>
   </div>
@@ -47,7 +52,7 @@ export default {
   data() {
     return {
       userInfo: {
-        username: '', // 預設值，可從伺服器獲取
+        username: '',
         email: '',
         birthDate: '',
         paymentInfo: ''
@@ -57,8 +62,8 @@ export default {
         birthDate: '',
         paymentInfo: ''
       },
-      updateStatus: null, // 更新狀態（成功或錯誤）
-      coupons: [] // 優惠券列表
+      updateStatus: null, 
+      coupons: [] 
     };
   },
   mounted() {
@@ -68,7 +73,7 @@ export default {
   methods: {
     async fetchUserInfo() {
       try {
-        const response = await axios.get('/api/user'); // 替換為你的 API 路徑
+        const response = await axios.get('/api/user'); // 替換為API 路徑
         this.userInfo = response.data;
         this.updatedUserInfo = { ...this.userInfo };
       } catch (error) {
@@ -78,7 +83,7 @@ export default {
     
     async fetchCoupons() {
       try {
-        const response = await axios.get('/api/coupons'); // 替換為你的 API 路徑
+        const response = await axios.get('/api/coupons'); // 替換為API 路徑
         this.coupons = response.data;
       } catch (error) {
         console.error('Failed to fetch coupons:', error);
@@ -89,10 +94,10 @@ export default {
       try {
         const response = await axios.put('/api/user', this.updatedUserInfo); // 替換為你的 API 路徑
         if (response.status === 200) {
-          this.updateStatus = { success: true, message: '信息更新成功！' };
+          this.updateStatus = { success: true, message: '更新成功！' };
           this.userInfo = { ...this.updatedUserInfo };
         } else {
-          this.updateStatus = { success: false, message: '信息更新失敗，請稍後再試。' };
+          this.updateStatus = { success: false, message: '更新失敗，請稍後再試。' };
         }
       } catch (error) {
         console.error('Failed to update user info:', error);
@@ -131,5 +136,17 @@ button:hover {
 
 .error {
   color: red;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin-bottom: 20px;
+}
+
+li p {
+  margin: 5px 0;
 }
 </style>
