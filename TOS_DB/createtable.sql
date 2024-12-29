@@ -59,7 +59,6 @@ CREATE TABLE tickets (
     quantity INTEGER NOT NULL,
     description VARCHAR(255),
     image_path VARCHAR(255), 
-    FOREIGN KEY (seller_id) REFERENCES sellers(user_id),
     FOREIGN KEY (event_id) REFERENCES events(id)
 );
 
@@ -107,3 +106,36 @@ CREATE TABLE order_items (
     FOREIGN KEY (order_id) REFERENCES orders(id),
     FOREIGN KEY (ticket_id) REFERENCES tickets(id)
 );
+
+
+INSERT INTO users (username, email, password, created_at)
+VALUES ('admin', 'admin@admin.com', 'admin', NOW());
+
+INSERT INTO admins (user_id)
+VALUES (1);
+
+INSERT INTO users (username, email, password, created_at)
+VALUES ('seller', 'seller@seller.com', 'seller', NOW());
+
+INSERT INTO sellers (user_id, company_name)
+VALUES (2, 'seller');
+
+INSERT INTO events (event_name, event_start, event_end, status, description, seller_id)
+VALUES ('event1', '2021-01-01', '2021-01-02', 'active', 'event1 description', 2);
+
+INSERT INTO tickets (event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path)
+VALUES (1, 'ticket1', '2021-01-01', '2021-01-02', 100, 'active', 100, 'ticket1 description', 'ticket1.jpg');
+
+-- list all table
+SELECT * FROM users;
+SELECT * FROM sellers;
+SELECT * FROM admins;
+SELECT * FROM customers;
+SELECT * FROM events;
+SELECT * FROM events_images;
+SELECT * FROM tickets;
+SELECT * FROM discounts;
+SELECT * FROM ticket_discounts;
+SELECT * FROM orders;
+SELECT * FROM order_discounts;
+SELECT * FROM order_items;
