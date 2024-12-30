@@ -106,8 +106,8 @@ export default {
     // 獲取活動列表
     async fetchEvents() {
       try {
-        
-        const response = await axios.get('/api/events');
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const response = await axios.get(`${apiUrl}/events`);
         this.events = Array.isArray(response.data) ? response.data : [];
       } catch (error) {
         console.error('Failed to fetch events:', error);
@@ -118,7 +118,8 @@ export default {
     // 獲取優惠券列表
     async fetchCoupons() {
       try {
-        const response = await axios.get('/api/coupons');
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const response = await axios.get(`${apiUrl}/coupons`);
         this.coupons = Array.isArray(response.data) ? response.data : [];
       } catch (error) {
         console.error('Failed to fetch coupons:', error);
@@ -129,11 +130,12 @@ export default {
     // 提交活動
     async submitEvent() {
       try {
+        const apiUrl = process.env.VUE_APP_API_URL;
         let response;
         if (this.eventForm.id) {
-          response = await axios.put(`/api/events/${this.eventForm.id}`, this.eventForm);
+          response = await axios.put(`${apiUrl}/events/${this.eventForm.id}`, this.eventForm);
         } else {
-          response = await axios.post('/api/events', this.eventForm);
+          response = await axios.post(`${apiUrl}/events`, this.eventForm);
         }
         if (response.status === 200) {
           this.fetchEvents();
@@ -147,11 +149,12 @@ export default {
     // 提交優惠券
     async submitCoupon() {
       try {
+        const apiUrl = process.env.VUE_APP_API_URL;
         let response;
         if (this.couponForm.id) {
-          response = await axios.put(`/api/coupons/${this.couponForm.id}`, this.couponForm);
+          response = await axios.put(`${apiUrl}/coupons/${this.couponForm.id}`, this.couponForm);
         } else {
-          response = await axios.post('/api/coupons', this.couponForm);
+          response = await axios.post(`${apiUrl}/coupons`, this.couponForm);
         }
         if (response.status === 200) {
           this.fetchCoupons();
@@ -169,8 +172,9 @@ export default {
 
     // 刪除活動
     async deleteEvent(eventId) {
+      const apiUrl = process.env.VUE_APP_API_URL;
       try {
-        const response = await axios.delete(`/api/events/${eventId}`);
+        const response = await axios.delete(`${apiUrl}/events/${eventId}`);
         if (response.status === 200) {
           this.fetchEvents();
         }
@@ -186,8 +190,9 @@ export default {
 
     // 刪除優惠券
     async deleteCoupon(couponId) {
+      const apiUrl = process.env.VUE_APP_API_URL;
       try {
-        const response = await axios.delete(`/api/coupons/${couponId}`);
+        const response = await axios.delete(`${apiUrl}/coupons/${couponId}`);
         if (response.status === 200) {
           this.fetchCoupons();
         }

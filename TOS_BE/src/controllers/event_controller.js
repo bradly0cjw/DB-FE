@@ -30,6 +30,49 @@ const createEvent = async (req, res) => {
     }
 };
 
+const updateEvent = async (req, res) => {
+    const { id } = req.params;
+    const { event_name, event_start, event_end, status, description, seller_id } = req.body;
+
+    const connection = await pool.getConnection();
+    try {
+        await connection.beginTransaction();
+
+        const [result] = await connection.query(
+            'UPDATE events SET event_name = ?, event_start = ?, event_end = ?, status = ?, description = ?, seller_id = ? WHERE id = ?',
+            [event_name, event_start, event_end, status, description, seller_id, id]
+        );
+
+        await connection.commit();
+        res.status(200).json({ id, event_name, event_start, event_end, status, description, seller_id });
+    } catch (error) {
+        await connection.rollback();
+        res.status(500).json({ error: error.message });
+    } finally {
+        connection.release();
+    }
+};
+
+const deleteEvent = async (req, res) => {
+    const { id } = req.params;
+
+    const connection = await pool.getConnection();
+    try {
+        await connection.beginTransaction();
+
+        const [result] = await connection.query('DELETE FROM events WHERE id = ?', [id]);
+
+        await connection.commit();
+        res.status(200).json({ message: 'Event deleted successfully' });
+    } catch (error) {
+        await connection.rollback();
+        res.status(500).json({ error: error.message });
+    } finally {
+        connection.release();
+    }
+};
+
+
 const getTicketsByEvent = async (req, res) => {
     const { eventId } = req.params;
     try {
@@ -83,5 +126,6 @@ const searchEvents = async (req, res) => {
 };
 
 module.exports = {
-    getEvents, createEvent, getTicketsByEvent, getEvent, createTicket, searchEvents
+    getEvents, createEvent, getTicketsByEvent, getEvent, createTicket, searchEvents,
+    updateEvent, deleteEvent
 };

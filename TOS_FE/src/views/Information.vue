@@ -80,7 +80,6 @@ export default {
             Authorization: `Bearer ${token}`
           }
         });
-        // const response = await axios.get(`${apiUrl}/user/${query}`); // 替換為API 路徑
         this.userInfo = response.data;
         this.updatedUserInfo = { ...this.userInfo };
       } catch (error) {

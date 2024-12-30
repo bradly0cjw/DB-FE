@@ -1,7 +1,7 @@
 const express = require('express');
 const { createUser, getUserByToken, getUsers, deleteUser, loginUser } = require('../controllers/user_controller');
-const { getEvents, createEvent, searchEvents, getTicketsByEvent, getEvent, createTicket } = require('../controllers/event_controller');
-
+const { getEvents, createEvent, updateEvent, deleteEvent, searchEvents, getTicketsByEvent, getEvent, createTicket } = require('../controllers/event_controller');
+const { getCoupons, createCoupon, updateCoupon, deleteCoupon } = require('../controllers/coupon_controller');
 
 const router = express.Router();
 
@@ -208,4 +208,25 @@ router.post('/tickets', createTicket);
  *         description: Invalid email or password
  */
 router.post('/login', loginUser);
+
+// Update event
+router.put('/events/:id', updateEvent);
+
+// Delete event
+router.delete('/events/:id', deleteEvent);
+
+// Fetch coupons
+router.get('/coupons', getCoupons);
+
+// Create coupon
+router.post('/coupons', createCoupon);
+
+// Update coupon
+router.put('/coupons/:id', updateCoupon);
+
+// Delete coupon
+router.delete('/coupons/:id', deleteCoupon);
+
+
+
 module.exports = router;
