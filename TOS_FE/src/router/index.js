@@ -8,6 +8,8 @@ import CartPage from '@/views/CartPage.vue';
 import OrderPage from '@/views/OrderPage.vue';
 import Search from "@/views/Search.vue";
 import Dashboard from '@/views/Dashboard.vue';
+import Register from '@/views/Register.vue';
+
 
 const routes = [
   {
@@ -56,7 +58,11 @@ const routes = [
     component: Dashboard,
     meta: { requiresSeller: true }, 
   },
-
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register,
+  },
 ];
 
 const router = createRouter({
