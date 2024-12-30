@@ -108,14 +108,14 @@ CREATE TABLE order_items (
 );
 
 
-INSERT INTO users (username, email, password, created_at)
-VALUES ('admin', 'admin@admin.com', '$2a$10$pntkMe6lCT6.KCFqC6OVRumqyWz42NoIyeEJMM4iNeV33rqGhB1vi', '2024-12-29T18:40:02.000Z');
+INSERT INTO users (id, username, email, password, created_at)
+VALUES (1, 'admin', 'admin@admin.com', '$2a$10$pntkMe6lCT6.KCFqC6OVRumqyWz42NoIyeEJMM4iNeV33rqGhB1vi', '2024-12-29 18:40:02');
 
 INSERT INTO admins (user_id)
 VALUES (1);
 
-INSERT INTO users (username, email, password, created_at)
-VALUES ('seller', 'seller@seller.com', '$2a$10$i0wLFIem09LiHl1cRrs.Y.nZzrcO0tyEtqRrpACbmA/NE6/fn3pNm', '2024-12-29T18:40:17.000Z');
+INSERT INTO users (id,username, email, password, created_at)
+VALUES (2, 'seller', 'seller@seller.com', '$2a$10$i0wLFIem09LiHl1cRrs.Y.nZzrcO0tyEtqRrpACbmA/NE6/fn3pNm', '2024-12-29 18:40:02');
 
 INSERT INTO sellers (user_id, company_name)
 VALUES (2, 'seller');
