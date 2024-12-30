@@ -1,8 +1,8 @@
 export default {
   namespaced: true,
   state: {
-    isLoggedIn: true,  // 測試用，上線請改 false
-    isSeller: true,   // 新增 isSeller 判斷
+    isLoggedIn: true,  // 將初始值設為 false
+    isSeller: false,    // 將初始值設為 false
     userInfo: null,
   },
   mutations: {

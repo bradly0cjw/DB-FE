@@ -104,15 +104,6 @@ export default {
       }
     }
   },
-  mounted() {
-    // 模擬從後端獲取登入狀態
-    const userToken = localStorage?.getItem("authToken");
-    if (userToken) {
-      this.isLoggedIn = true;
-    } else {
-      this.isLoggedIn = false;
-    }
-  },
 };
 </script>
 
