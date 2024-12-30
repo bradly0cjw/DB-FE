@@ -4,15 +4,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Ticket Order System</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -33,14 +26,8 @@
           </ul>
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDarkDropdownMenuLink"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button"
+                data-bs-toggle="dropdown" aria-expanded="false">
                 User
               </a>
               <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
@@ -51,16 +38,13 @@
                   <router-link to="/information" class="dropdown-item">Information</router-link>
                 </li>
                 <li>
-                  <router-link
-                    :to="isLoggedIn ? '/cart' : '/login'"
-                    class="dropdown-item"
-                  >
+                  <router-link :to="isLoggedIn ? '/cart' : '/login'" class="dropdown-item">
                     Cart
                   </router-link>
                 </li>
                 <li v-if="isLoggedIn">
                   <router-link to="/orders" class="dropdown-item">Order</router-link>
-                </li>               
+                </li>
                 <li v-if="isLoggedIn">
                   <a class="dropdown-item" href="#" @click="logout">Log Out</a>
                 </li>
@@ -102,6 +86,15 @@ export default {
       if (this.searchQuery) {
         this.$router.push({ path: '/search', query: { q: this.searchQuery } });
       }
+    }
+  },
+  mounted() {
+    // 模擬從後端獲取登入狀態
+    const userToken = localStorage?.getItem("authToken");
+    if (userToken) {
+      this.isLoggedIn = true;
+    } else {
+      this.isLoggedIn = false;
     }
   },
 };
