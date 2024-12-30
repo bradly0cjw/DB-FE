@@ -35,18 +35,25 @@ export default {
   methods: {
     async fetchCartItems() {
       try {
-        const response = await axios.get('/api/cart'); // 替換為你的 API 路徑
-        // 確保 cartItems 是數組
-        this.cartItems = Array.isArray(response.data) ? response.data : [];
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartItems = await Promise.all(
+          cart.map(async (ticketId) => {
+            const response = await axios.get(`${apiUrl}/tickets/${ticketId}`);
+            return response.data;
+          })
+        );
+        this.cartItems = cartItems;
       } catch (error) {
         console.error('Failed to fetch cart items:', error);
-        // 發生錯誤時設為空數組
         this.cartItems = [];
       }
     },
     removeFromCart(itemId) {
-      // 從 cartItems 中過濾掉指定項目
       this.cartItems = this.cartItems.filter(item => item.id !== itemId);
+      const cart = JSON.parse(localStorage.getItem('cart')) || [];
+      const updatedCart = cart.filter(id => id !== itemId);
+      localStorage.setItem('cart', JSON.stringify(updatedCart));
     },
   },
 };

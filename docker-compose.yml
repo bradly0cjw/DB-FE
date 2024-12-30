@@ -12,7 +12,7 @@ services:
       - ./TOS_BE/src:/usr/src/app/src
     environment:
       NODE_ENV: production
-      ALLOWED_ORIGINS: 'http://localhost:8080'
+      ALLOWED_ORIGINS: 'http://localhost:8080,http://localhost:5173'
       API_URL: 'http://localhost:3000'
       DB_HOST: 'database'
       DB_USER: 'dbuser'

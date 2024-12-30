@@ -2,7 +2,7 @@ const pool = require('../db');
 
 const getCoupons = async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT * FROM coupons');
+        const [rows] = await pool.query('SELECT * FROM discounts');
         res.json(rows);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -10,15 +10,15 @@ const getCoupons = async (req, res) => {
 };
 
 const createCoupon = async (req, res) => {
-    const { code, discount, expiration } = req.body;
+    const { code, type, discount, expiration } = req.body;
 
     const connection = await pool.getConnection();
     try {
         await connection.beginTransaction();
 
         const [result] = await connection.query(
-            'INSERT INTO coupons (code, discount, expiration) VALUES (?, ?, ?)',
-            [code, discount, expiration]
+            'INSERT INTO discounts (code, discount_type, discount_value, expired_at) VALUES (?,?, ?, ?)',
+            [code, type, discount, expiration]
         );
 
         await connection.commit();
@@ -33,15 +33,15 @@ const createCoupon = async (req, res) => {
 
 const updateCoupon = async (req, res) => {
     const { id } = req.params;
-    const { code, discount, expiration } = req.body;
+    const { code, type, discount, expiration } = req.body;
 
     const connection = await pool.getConnection();
     try {
         await connection.beginTransaction();
 
         const [result] = await connection.query(
-            'UPDATE coupons SET code = ?, discount = ?, expiration = ? WHERE id = ?',
-            [code, discount, expiration, id]
+            'UPDATE discounts SET code = ?, discount_type = ?, discount_value = ?, expired_at = ? WHERE id = ?',
+            [code, type, discount, expiration, id]
         );
 
         await connection.commit();
@@ -61,10 +61,10 @@ const deleteCoupon = async (req, res) => {
     try {
         await connection.beginTransaction();
 
-        const [result] = await connection.query('DELETE FROM coupons WHERE id = ?', [id]);
+        const [result] = await connection.query('DELETE FROM discounts WHERE id = ?', [id]);
 
         await connection.commit();
-        res.status(200).json({ message: 'Coupon deleted successfully' });
+        res.status(200).json({ message: 'discount deleted successfully' });
     } catch (error) {
         await connection.rollback();
         res.status(500).json({ error: error.message });

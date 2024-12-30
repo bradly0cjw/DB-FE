@@ -156,6 +156,27 @@ router.post('/events', createEvent);
  */
 router.get('/events/:eventId/tickets', getTicketsByEvent);
 
+/**
+ * @swagger
+ * /events/{eventId}:
+ *  get:
+ *   summary: Get an event by ID
+ *  parameters:
+ *   - in: path
+ *    name: eventId
+ *   required: true
+ *  schema:
+ *  type: integer
+ * description: The event ID
+ * responses:
+ * 200:
+ * description: An event
+ * content:
+ * application/json:
+ * schema:
+ * $ref: '#/components/schemas/Event'
+ */
+
 router.get('/event/:eventId', getEvent);
 /**
  * @swagger
@@ -209,24 +230,143 @@ router.post('/tickets', createTicket);
  */
 router.post('/login', loginUser);
 
-// Update event
+/**
+ * @swagger
+ * /events/{id}:
+ *   put:
+ *     summary: Updates an event by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The event ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Event'
+ *     responses:
+ *       200:
+ *         description: Event updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Event'
+ *       404:
+ *         description: Event not found
+ */
 router.put('/events/:id', updateEvent);
 
-// Delete event
+/**
+ * @swagger
+ * /events/{id}:
+ *   delete:
+ *     summary: Deletes an event by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The event ID
+ *     responses:
+ *       200:
+ *         description: Event deleted successfully
+ *       404:
+ *         description: Event not found
+ */
 router.delete('/events/:id', deleteEvent);
 
-// Fetch coupons
+/**
+ * @swagger
+ * /coupons:
+ *   get:
+ *     summary: Retrieves a list of coupons
+ *     responses:
+ *       200:
+ *         description: A list of coupons
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Coupon'
+ */
 router.get('/coupons', getCoupons);
 
-// Create coupon
+/**
+ * @swagger
+ * /coupons:
+ *   post:
+ *     summary: Creates a new coupon
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Coupon'
+ *     responses:
+ *       201:
+ *         description: Coupon created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Coupon'
+ */
 router.post('/coupons', createCoupon);
 
-// Update coupon
+/**
+ * @swagger
+ * /coupons/{id}:
+ *   put:
+ *     summary: Updates a coupon by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The coupon ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Coupon'
+ *     responses:
+ *       200:
+ *         description: Coupon updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Coupon'
+ *       404:
+ *         description: Coupon not found
+ */
 router.put('/coupons/:id', updateCoupon);
 
-// Delete coupon
+/**
+ * @swagger
+ * /coupons/{id}:
+ *   delete:
+ *     summary: Deletes a coupon by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The coupon ID
+ *     responses:
+ *       200:
+ *         description: Coupon deleted successfully
+ *       404:
+ *         description: Coupon not found
+ */
 router.delete('/coupons/:id', deleteCoupon);
-
 
 
 module.exports = router;

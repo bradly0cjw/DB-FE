@@ -1,4 +1,4 @@
--- DROP DATABASE dbproj;
+DROP DATABASE dbproj;
 -- CREATE DATABASE dbproj;
 CREATE DATABASE if not exists dbproj;
 
@@ -64,6 +64,7 @@ CREATE TABLE tickets (
 
 CREATE TABLE discounts (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    code VARCHAR(10) UNIQUE NOT NULL,
     seller_id INTEGER,
     discount_type VARCHAR(50) NOT NULL,
     discount_value DECIMAL(10, 2) NOT NULL,

@@ -151,10 +151,13 @@ export default {
       try {
         const apiUrl = process.env.VUE_APP_API_URL;
         let response;
+        console.log(this.couponForm.id);
         if (this.couponForm.id) {
           response = await axios.put(`${apiUrl}/coupons/${this.couponForm.id}`, this.couponForm);
+          console.log("@@");  
         } else {
           response = await axios.post(`${apiUrl}/coupons`, this.couponForm);
+          console.log("@");  
         }
         if (response.status === 200) {
           this.fetchCoupons();
