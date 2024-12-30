@@ -96,10 +96,10 @@ const loginUser = async (req, res) => {
 
     const jwtSecret = process.env.JWT_SECRET || 'default_secret';
 
-    const [adminRows] = await pool.query('SELECT id FROM admin WHERE user_id = ?', [user.id]);
+    const [adminRows] = await pool.query('SELECT id FROM admins WHERE user_id = ?', [user.id]);
     const role = adminRows.length > 0 ? 'admin' : 'user';
 
-    const [sellerRows] = await pool.query('SELECT id FROM seller WHERE user_id = ?', [user.id]);
+    const [sellerRows] = await pool.query('SELECT id FROM sellers WHERE user_id = ?', [user.id]);
     role = sellerRows.length > 0 ? 'seller' : role;
 
     const token = jwt.sign({ id: user.id }, jwtSecret, { expiresIn: '1h' });
