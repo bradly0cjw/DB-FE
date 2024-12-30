@@ -70,10 +70,9 @@ export default {
       try {
         const apiUrl = process.env.VUE_APP_API_URL;
         const response = await axios.post(`${apiUrl}/login`, {
-          email: this.email,
-          password: this.password,
+          email: this.userEmail,
+          password: this.userPassword,
         }); // 替換為你的 API 路徑
-
         // 假設 API 返回一個 token
         const { token } = response.data;
 
@@ -90,7 +89,8 @@ export default {
     // Handle seller login
     async handleSellerLogin() {
       try {
-        const response = await axios.post('/api/login', {
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const response = await axios.post(`${apiUrl}/login`, {
           email: this.sellerEmail,
           password: this.sellerPassword,
         });
