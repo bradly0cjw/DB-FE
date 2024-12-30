@@ -78,7 +78,6 @@ export default {
 
         // 儲存 token（此處使用 localStorage）
         localStorage.setItem("userToken", token);
-        this.login(userInfo);
         this.$router.push("/");
       } catch (error) {
         console.error('User login failed:', error);
@@ -94,9 +93,8 @@ export default {
           email: this.sellerEmail,
           password: this.sellerPassword,
         });
-        const { token, userInfo } = response.data;
+        const { token } = response.data;
         localStorage.setItem("sellerToken", token);
-        this.login(userInfo);
         this.$router.push("/seller/dashboard");  // Redirect to seller dashboard
       } catch (error) {
         console.error('Seller login failed:', error);
