@@ -39,7 +39,7 @@ export default {
   methods: {
     async fetchEventDetails(eventId) {
       try {
-        const response = await axios.get(`http://localhost:3000/event/${eventId}`); // 替換為你的 API 路徑
+        const response = await axios.get(`/event/${eventId}`); // 替換為你的 API 路徑
         const { event_name, description, event_start, event_end } = response.data;
         this.event = {
           name: event_name,
@@ -53,7 +53,7 @@ export default {
     },
     async fetchTickets(eventId) {
       try {
-        const response = await axios.get(`http://localhost:3000/events/${eventId}/tickets`); // 替換為你的 API 路徑
+        const response = await axios.get(`/events/${eventId}/tickets`); // 替換為你的 API 路徑
         this.tickets = response.data;
       } catch (error) {
         console.error('Failed to fetch tickets:', error);
