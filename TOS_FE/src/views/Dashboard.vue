@@ -53,6 +53,14 @@
           <input type="number" id="couponDiscount" v-model="couponForm.discount" required />
         </div>
         <div class="form-group">
+          <label for="couponType">折扣類型：</label>
+          <select id="couponType" v-model="couponForm.type">
+            <option value="ship">運費</option>
+            <option value="product">商品</option>
+            <option value="total">總金額</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label for="couponExpiration">過期日期：</label>
           <input type="date" id="couponExpiration" v-model="couponForm.expiration" required />
         </div>
@@ -154,10 +162,16 @@ export default {
         console.log(this.couponForm.id);
         if (this.couponForm.id) {
           response = await axios.put(`${apiUrl}/coupons/${this.couponForm.id}`, this.couponForm);
-          console.log("@@");  
+          console.log("@@");
         } else {
-          response = await axios.post(`${apiUrl}/coupons`, this.couponForm);
-          console.log("@");  
+          response = await axios.post(`${apiUrl}/coupons`, {
+            code: this.couponForm.code,
+            type: this.couponForm.type,
+            discount: this.couponForm.discount,
+            expiration: this.couponForm.expiration
+          }
+          );
+          console.log("@");
         }
         if (response.status === 200) {
           this.fetchCoupons();
