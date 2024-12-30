@@ -9,7 +9,7 @@ import OrderPage from '@/views/OrderPage.vue';
 import Search from "@/views/Search.vue";
 import Dashboard from '@/views/Dashboard.vue';
 import Register from '@/views/Register.vue';
-// import Admin from '@/views/Admin.vue';
+import Admin from '@/views/Admin.vue';
 
 
 const routes = [
@@ -63,6 +63,11 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register,
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: Admin,
   },
 ];
 

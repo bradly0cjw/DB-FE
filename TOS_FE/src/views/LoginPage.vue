@@ -1,9 +1,3 @@
-
-以下是修改後的代碼，將兩個登入入口合併為一個，並通過後端回傳數據來判斷使用者類型。此外，還新增了一個註冊按鈕，方便用戶跳轉到註冊頁面：
-
-修改後的代碼
-vue
-複製程式碼
 <template>
   <div class="login-page">
     <div class="login-header">
@@ -66,20 +60,17 @@ export default {
           password: this.password,
         });
 
-        // 假設 API 回傳的數據包含 `token` 和 `userType`
-        const { token, role } = response.data;
-
-        // 儲存 token
+        const { token, userType } = response.data;
 
         localStorage.setItem("authToken", token);
 
         // 根據 userType 跳轉
-        if (role == "user") {
+        if (userType === "user") {
           this.$router.push("/");
-        } else if (role == "seller") {
+        } else if (userType === "seller") {
           this.$router.push("/seller/dashboard");
         } 
-        else if (role == "admin") {
+        else if (userType === "admin") {
           this.$router.push("/admin");
         }else {
           this.error = "Unknown user type.";
