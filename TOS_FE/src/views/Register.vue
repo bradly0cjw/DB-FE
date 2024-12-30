@@ -85,8 +85,8 @@
   
         try {
           const apiUrl = process.env.VUE_APP_API_URL;
-          const response = await axios.post(`${apiUrl}/register`, {
-            name: this.name,
+          const response = await axios.post(`${apiUrl}/users`, {
+            username: this.name,
             email: this.email,
             password: this.password,
           });
