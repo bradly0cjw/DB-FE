@@ -115,7 +115,9 @@ INSERT INTO admins (user_id)
 VALUES (1);
 
 INSERT INTO users (id,username, email, password, created_at)
-VALUES (2, 'seller', 'seller@seller.com', '$2a$10$i0wLFIem09LiHl1cRrs.Y.nZzrcO0tyEtqRrpACbmA/NE6/fn3pNm', '2024-12-29 18:40:02');
+VALUES (2, 'seller', 'seller@seller.com', '$2a$10$.ogu81/hk1Lmq7ypfUO1s.F3.A3mQtMQ/Hn..vDiXpfDxhEJUBtB.', '2024-12-30 08:32:01');
+INSERT INTO users (id,username, email, password, created_at)
+VALUES (3, 'user', 'user@user.com', '$2a$10$iooAYxzs2TU607eSS6eG9OapNp2JGcc8VxNgioPhA91P7h8gKlmNS', '2024-12-30 13:31:06');
 
 INSERT INTO sellers (user_id, company_name)
 VALUES (2, 'seller');

@@ -7,7 +7,7 @@
         v-for="product in products"
         :key="product.id"
       >
-        <EventCard :product="product" />
+        <EventCard :event="product" />
       </div>
     </div>
   </div>
