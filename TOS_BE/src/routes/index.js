@@ -1,6 +1,7 @@
 const express = require('express');
 const { createUser, getUsers, deleteUser,loginUser } = require('../controllers/index');
-const { getEvents, createEvent, getTicketsByEvent, createTicket } = require('../controllers/event_controller');
+const { getEvents, createEvent, searchEvents, getTicketsByEvent, createTicket } = require('../controllers/event_controller');
+
 
 const router = express.Router();
 
@@ -91,6 +92,9 @@ router.delete('/users/:id', deleteUser);
  *                 $ref: '#/components/schemas/Event'
  */
 router.get('/events', getEvents);
+
+
+router.get('/events/search', searchEvents);
 
 /**
  * @swagger
