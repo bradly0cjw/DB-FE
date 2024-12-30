@@ -1,6 +1,6 @@
 const express = require('express');
 const { createUser, getUsers, deleteUser,loginUser } = require('../controllers/index');
-const { getEvents, createEvent, searchEvents, getTicketsByEvent, createTicket } = require('../controllers/event_controller');
+const { getEvents, createEvent, searchEvents, getTicketsByEvent, getEvent, createTicket } = require('../controllers/event_controller');
 
 
 const router = express.Router();
@@ -141,6 +141,7 @@ router.post('/events', createEvent);
  */
 router.get('/events/:eventId/tickets', getTicketsByEvent);
 
+router.get('/event/:eventId', getEvent);
 /**
  * @swagger
  * /tickets:

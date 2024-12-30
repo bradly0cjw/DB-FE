@@ -1,12 +1,16 @@
 <template>
-  <div class="ticket-detail-page">
-    <h1>{{ event.name }}</h1>
-    <p>{{ event.description }}</p>
+  <div v-if="event !== null" class="ticket-detail-page">
+    <div class="event-detail d-flex flex-column align-items-center w-100">
+    <div class="w-50">
+      <h1>{{ event.name }}</h1>
+      <p>{{ event.description }}</p>
+    </div>
+    </div>
     <div v-if="tickets.length === 0">
       <p>No tickets available for this event.</p>
     </div>
-    <div v-else class="ticket-list">
-      <div v-for="ticket in tickets" :key="ticket.id" class="ticket-item">
+    <div v-else class="ticket-list d-flex justify-content-center">
+      <div v-for="ticket in tickets" :key="ticket.id" class="ticket-item" >
         <h4>{{ ticket.name }}</h4>
         <p>{{ ticket.description }}</p>
         <p>Price: ${{ ticket.price }}</p>
@@ -35,15 +39,21 @@ export default {
   methods: {
     async fetchEventDetails(eventId) {
       try {
-        const response = await axios.get(`/api/events/${eventId}`); // 替換為你的 API 路徑
-        this.event = response.data;
+        const response = await axios.get(`http://localhost:3000/event/${eventId}`); // 替換為你的 API 路徑
+        const { event_name, description, event_start, event_end } = response.data;
+        this.event = {
+          name: event_name,
+          description,
+          start: event_start,
+          end: event_end,
+        };
       } catch (error) {
-        console.error('Failed to fetch event details:', error);
+        console.error('Failed to fetch event details:', error.message);
       }
     },
     async fetchTickets(eventId) {
       try {
-        const response = await axios.get(`/api/events/${eventId}/tickets`); // 替換為你的 API 路徑
+        const response = await axios.get(`http://localhost:3000/events/${eventId}/tickets`); // 替換為你的 API 路徑
         this.tickets = response.data;
       } catch (error) {
         console.error('Failed to fetch tickets:', error);

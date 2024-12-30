@@ -40,6 +40,16 @@ const getTicketsByEvent = async (req, res) => {
     }
 };
 
+const getEvent = async (req, res) => {
+    const { eventId } = req.params;
+    try {
+        const [rows] = await pool.query('SELECT * FROM events WHERE id = ?', [eventId]);
+        res.json(rows[0]);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
 const createTicket = async (req, res) => {
     const { event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path } = req.body;
 
@@ -73,5 +83,5 @@ const searchEvents = async (req, res) => {
 };
 
 module.exports = {
-    getEvents, createEvent, getTicketsByEvent, createTicket, searchEvents
+    getEvents, createEvent, getTicketsByEvent, getEvent, createTicket, searchEvents
 };
