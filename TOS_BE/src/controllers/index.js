@@ -90,6 +90,10 @@ const loginUser = async (req, res) => {
       isPasswordValid = password === user.password;
     }
 
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
     const jwtSecret = process.env.JWT_SECRET || 'default_secret';
 
     const token = jwt.sign({ id: user.id }, jwtSecret, { expiresIn: '1h' });
