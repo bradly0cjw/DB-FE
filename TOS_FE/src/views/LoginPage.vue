@@ -67,18 +67,18 @@ export default {
         });
 
         // 假設 API 回傳的數據包含 `token` 和 `userType`
-        const { token, userType } = response.data;
+        const { token, role } = response.data;
 
         // 儲存 token
         localStorage.setItem("authToken", token);
 
         // 根據 userType 跳轉
-        if (userType === "user") {
+        if (role == "user") {
           this.$router.push("/");
-        } else if (userType === "seller") {
+        } else if (role == "seller") {
           this.$router.push("/seller/dashboard");
         } 
-        else if (userType === "admin") {
+        else if (role == "admin") {
           this.$router.push("/admin");
         }else {
           this.error = "Unknown user type.";

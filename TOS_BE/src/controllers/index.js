@@ -97,7 +97,7 @@ const loginUser = async (req, res) => {
     const jwtSecret = process.env.JWT_SECRET || 'default_secret';
 
     const [adminRows] = await pool.query('SELECT user_id FROM admins WHERE user_id = ?', [user.id]);
-    const role = adminRows.length > 0 ? 'admin' : 'user';
+    var role = adminRows.length > 0 ? 'admin' : 'user';
 
     const [sellerRows] = await pool.query('SELECT user_id FROM sellers WHERE user_id = ?', [user.id]);
     role = sellerRows.length > 0 ? 'seller' : role;

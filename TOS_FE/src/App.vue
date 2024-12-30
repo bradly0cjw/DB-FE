@@ -88,7 +88,7 @@ export default {
   },
   methods: {
     logout() {
-      // 模擬登出邏輯
+      localStorage.removeItem("authToken");
       this.isLoggedIn = false;
       alert("You have logged out.");
       this.$router.push("/");
