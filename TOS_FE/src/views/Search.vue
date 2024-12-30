@@ -31,7 +31,7 @@ export default {
     await this.searchEvents(query);
   },
   watch: {
-    '$route.query.q': async function(newQuery) {
+    '$route.query.q': async function (newQuery) {
       await this.searchEvents(newQuery);
     }
   },
@@ -45,6 +45,7 @@ export default {
       } catch (error) {
         console.error('Failed to fetch search results:', error);
         this.events = [];
+      }
     }
   }
 };
@@ -53,14 +54,17 @@ export default {
 <style scoped>
 .search-page {
   padding: 20px;
-  background-color: #121212; /* 深色背景 */
-  color: #e0e0e0; /* 淺灰色文字 */
+  background-color: #121212;
+  /* 深色背景 */
+  color: #e0e0e0;
+  /* 淺灰色文字 */
 }
 
 .page-title {
   font-size: 2rem;
   font-weight: bold;
-  color: #fff; /* 白色文字 */
+  color: #fff;
+  /* 白色文字 */
   margin-bottom: 20px;
 }
 
@@ -74,9 +78,11 @@ export default {
 .no-results {
   text-align: center;
   padding: 50px;
-  background-color: #333; /* 深灰色背景 */
+  background-color: #333;
+  /* 深灰色背景 */
   border-radius: 8px;
-  color: #aaa; /* 淺灰色文字 */
+  color: #aaa;
+  /* 淺灰色文字 */
 }
 
 .no-results p {
@@ -84,8 +90,10 @@ export default {
 }
 
 .event-card {
-  background-color: #1e1e1e; /* 深色卡片背景 */
-  color: #fff; /* 白色文字 */
+  background-color: #1e1e1e;
+  /* 深色卡片背景 */
+  color: #fff;
+  /* 白色文字 */
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
   overflow: hidden;
@@ -95,7 +103,8 @@ export default {
 }
 
 .event-card:hover {
-  transform: translateY(-5px); /* 卡片懸浮效果 */
+  transform: translateY(-5px);
+  /* 卡片懸浮效果 */
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
 }
 
