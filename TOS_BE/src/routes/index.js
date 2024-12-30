@@ -1,5 +1,5 @@
 const express = require('express');
-const { createUser, getUsers, deleteUser,loginUser } = require('../controllers/index');
+const { createUser, getUserByToken, getUsers, deleteUser, loginUser } = require('../controllers/user_controller');
 const { getEvents, createEvent, searchEvents, getTicketsByEvent, getEvent, createTicket } = require('../controllers/event_controller');
 
 
@@ -55,6 +55,21 @@ router.get('/users', getUsers);
  *               $ref: '#/components/schemas/User'
  */
 router.post('/users', createUser);
+
+/**
+ * @swagger
+ * /user:
+ *   get:
+ *     summary: Retrieves user information by auth token
+ *     responses:
+ *       200:
+ *         description: User information
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ */
+router.get('/user', getUserByToken);
 
 /**
  * @swagger

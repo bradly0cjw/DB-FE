@@ -106,6 +106,7 @@ export default {
     // 獲取活動列表
     async fetchEvents() {
       try {
+        
         const response = await axios.get('/api/events');
         this.events = Array.isArray(response.data) ? response.data : [];
       } catch (error) {

@@ -73,7 +73,14 @@ export default {
   methods: {
     async fetchUserInfo() {
       try {
-        const response = await axios.get('/api/user'); // 替換為API 路徑
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const token = localStorage.getItem('authToken');
+        const response = await axios.get(`${apiUrl}/user`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        // const response = await axios.get(`${apiUrl}/user/${query}`); // 替換為API 路徑
         this.userInfo = response.data;
         this.updatedUserInfo = { ...this.userInfo };
       } catch (error) {

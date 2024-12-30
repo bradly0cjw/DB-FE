@@ -47,6 +47,22 @@ const getUsers = async (req, res) => {
   }
 };
 
+const getUserByToken = async (req, res) => {
+  const token = req.headers.authorization.split(' ')[1];
+  const jwtSecret = process.env.JWT_SECRET || 'default_secret';
+
+  try {
+    const decoded = jwt.verify(token, jwtSecret);
+    const [rows] = await pool.query('SELECT * FROM users WHERE id = ?', [decoded.id]);
+    if (rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(rows[0]);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 const deleteUser = async (req, res) => {
   const { id } = req.params;
 
@@ -113,5 +129,6 @@ module.exports = {
   createUser,
   getUsers,
   deleteUser,
-  loginUser
+  loginUser,
+  getUserByToken
 };
