@@ -68,11 +68,16 @@ export default {
     // Handle user login
     async handleUserLogin() {
       try {
-        const response = await axios.post('/api/login', {
-          email: this.userEmail,
-          password: this.userPassword,
-        });
-        const { token, userInfo } = response.data;
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const response = await axios.post(`${apiUrl}/login`, {
+          email: this.email,
+          password: this.password,
+        }); // 替換為你的 API 路徑
+
+        // 假設 API 返回一個 token
+        const { token } = response.data;
+
+        // 儲存 token（此處使用 localStorage）
         localStorage.setItem("userToken", token);
         this.login(userInfo);
         this.$router.push("/");

@@ -42,26 +42,36 @@ const getTicketsByEvent = async (req, res) => {
 
 const createTicket = async (req, res) => {
     const { event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path } = req.body;
-  
+
     const connection = await pool.getConnection();
     try {
-      await connection.beginTransaction();
-  
-      const [result] = await connection.query(
-        'INSERT INTO tickets (event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path]
-      );
-  
-      await connection.commit();
-      res.status(201).json({ id: result.insertId, event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path });
+        await connection.beginTransaction();
+
+        const [result] = await connection.query(
+            'INSERT INTO tickets (event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path]
+        );
+
+        await connection.commit();
+        res.status(201).json({ id: result.insertId, event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path });
     } catch (error) {
-      await connection.rollback();
-      res.status(500).json({ error: error.message });
+        await connection.rollback();
+        res.status(500).json({ error: error.message });
     } finally {
-      connection.release();
+        connection.release();
     }
-  };
+};
+
+const searchEvents = async (req, res) => {
+    const { q } = req.query;
+    try {
+        const [rows] = await pool.query('SELECT * FROM events WHERE event_name LIKE ?', [`%${q}%`]);
+        res.json(rows);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
 module.exports = {
-    getEvents, createEvent, getTicketsByEvent, createTicket
+    getEvents, createEvent, getTicketsByEvent, createTicket, searchEvents
 };

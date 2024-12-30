@@ -2,7 +2,7 @@
   <div class="search-page" v-if="events.length > 0">
     <h1 class="page-title">Search Results</h1>
     <div class="event-list">
-      <EventCard v-for="event in events" :key="event.id" :product="event" />
+      <EventCard v-for="event in events" :key="event.id" :event="event" />
     </div>
   </div>
   <div v-else>
@@ -38,12 +38,13 @@ export default {
   methods: {
     async searchEvents(query) {
       try {
-        const response = await axios.get(`/api/events/search?q=${query}`); // 替換為你的 API 路徑
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const response = await axios.get(`${apiUrl}/events/search?q=${query}`);
         this.events = response.data;
+        console.log(this.events);
       } catch (error) {
         console.error('Failed to fetch search results:', error);
-        this.events = []; // 確保在出錯時 events 為空數組
-      }
+        this.events = [];
     }
   }
 };

@@ -30,10 +30,8 @@ export default {
     async fetchEvents() {
       try {
         const apiUrl = process.env.VUE_APP_API_URL;
-        console.log('API URL:', apiUrl);
         const response = await axios.get(`${apiUrl}/events`);
         this.events = response.data;
-        console.log('Events:', this.events);
       } catch (error) {
         console.error('Error fetching events:', error);
       }
