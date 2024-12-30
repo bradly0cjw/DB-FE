@@ -1,105 +1,95 @@
+
+以下是修改後的代碼，將兩個登入入口合併為一個，並通過後端回傳數據來判斷使用者類型。此外，還新增了一個註冊按鈕，方便用戶跳轉到註冊頁面：
+
+修改後的代碼
+vue
+複製程式碼
 <template>
   <div class="login-page">
     <div class="login-header">
       <h1>Login Portal</h1>
-      <p>Please select your login type below</p>
+      <p>Please log in to access your account</p>
     </div>
     <div class="login-container">
-      <!-- User Login -->
+      <!-- Unified Login -->
       <div class="login-card">
-        <h2>User Login</h2>
-        <form @submit.prevent="handleUserLogin">
+        <h2>Login</h2>
+        <form @submit.prevent="handleLogin">
           <div class="form-group">
-            <label for="userEmail">Email</label>
-            <input type="email" v-model="userEmail" id="userEmail" placeholder="Enter your email" required />
+            <label for="email">Email</label>
+            <input
+              type="email"
+              v-model="email"
+              id="email"
+              placeholder="Enter your email"
+              required
+            />
           </div>
           <div class="form-group">
-            <label for="userPassword">Password</label>
-            <input type="password" v-model="userPassword" id="userPassword" placeholder="Enter your password" required />
+            <label for="password">Password</label>
+            <input
+              type="password"
+              v-model="password"
+              id="password"
+              placeholder="Enter your password"
+              required
+            />
           </div>
           <button type="submit" class="btn">Login</button>
-          <p v-if="userError" class="error">{{ userError }}</p>
+          <p v-if="error" class="error">{{ error }}</p>
         </form>
-      </div>
-
-      <!-- Seller Login -->
-      <div class="login-card">
-        <h2>Seller Login</h2>
-        <form @submit.prevent="handleSellerLogin">
-          <div class="form-group">
-            <label for="sellerEmail">Email</label>
-            <input type="email" v-model="sellerEmail" id="sellerEmail" placeholder="Enter your email" required />
-          </div>
-          <div class="form-group">
-            <label for="sellerPassword">Password</label>
-            <input type="password" v-model="sellerPassword" id="sellerPassword" placeholder="Enter your password" required />
-          </div>
-          <button type="submit" class="btn">Login</button>
-          <p v-if="sellerError" class="error">{{ sellerError }}</p>
-        </form>
+        <button class="btn register-btn" @click="navigateToRegister">
+          Register
+        </button>
       </div>
     </div>
   </div>
 </template>
 
-
-
 <script>
-import axios from 'axios';
-import { mapActions } from 'vuex';
+import axios from "axios";
 
 export default {
   data() {
     return {
-      // User login data
-      userEmail: '',
-      userPassword: '',
-      userError: null,
-
-      // Seller login data
-      sellerEmail: '',
-      sellerPassword: '',
-      sellerError: null,
+      email: "",
+      password: "",
+      error: null,
     };
   },
   methods: {
-    ...mapActions('user', ['login']),
-    
-    // Handle user login
-    async handleUserLogin() {
+    async handleLogin() {
       try {
         const apiUrl = process.env.VUE_APP_API_URL;
         const response = await axios.post(`${apiUrl}/login`, {
-          email: this.userEmail,
-          password: this.userPassword,
-        }); // 替換為你的 API 路徑
-        // 假設 API 返回一個 token
-        const { token } = response.data;
+          email: this.email,
+          password: this.password,
+        });
 
-        // 儲存 token（此處使用 localStorage）
-        localStorage.setItem("userToken", token);
-        this.$router.push("/");
+        // 假設 API 回傳的數據包含 `token` 和 `userType`
+        const { token, userType } = response.data;
+
+        // 儲存 token
+        localStorage.setItem("authToken", token);
+
+        // 根據 userType 跳轉
+        if (userType === "user") {
+          this.$router.push("/");
+        } else if (userType === "seller") {
+          this.$router.push("/seller/dashboard");
+        } 
+        else if (userType === "admin") {
+          this.$router.push("/admin");
+        }else {
+          this.error = "Unknown user type.";
+        }
       } catch (error) {
-        console.error('User login failed:', error);
-        this.userError = 'Invalid email or password. Please try again.';
+        console.error("Login failed:", error);
+        this.error = "Invalid email or password. Please try again.";
       }
     },
-
-    // Handle seller login
-    async handleSellerLogin() {
-      try {
-        const apiUrl = process.env.VUE_APP_API_URL;
-        const response = await axios.post(`${apiUrl}/login`, {
-          email: this.sellerEmail,
-          password: this.sellerPassword,
-        });
-        const { token } = response.data;
-        localStorage.setItem("sellerToken", token);
-        this.$router.push("/seller/dashboard");  // Redirect to seller dashboard
-      } catch (error) {
-        console.error('Seller login failed:', error);
-        this.sellerError = 'Invalid email or password. Please try again.';
-      }
+    navigateToRegister() {
+      this.$router.push("/register");
     },
   },
 };
@@ -218,5 +208,13 @@ export default {
   color: #ff4d4d;
   margin-top: 10px;
   font-size: 14px;
+}
+
+.register-btn {
+  margin-top: 20px;
+  background-color: #2196F3;
+}
+.register-btn:hover {
+  background-color: #0b7dda;
 }
 </style>
