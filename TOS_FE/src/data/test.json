@@ -1,21 +1,21 @@
 [
     {
       "id": 1,
-      "name": "Concert Ticket",
+      "event_name": "Concert Ticket",
       "description": "Enjoy a night of great music.",
-      "image": "https://via.placeholder.com/150"
+      "image_path": "https://via.placeholder.com/150"
     },
     {
       "id": 2,
-      "name": "Movie Ticket",
+      "event_name": "Movie Ticket",
       "description": "Watch the latest blockbuster.",
-      "image": "https://via.placeholder.com/150"
+      "image_path": "https://via.placeholder.com/150"
     },
     {
       "id": 3,
-      "name": "Theater Ticket",
+      "event_name": "Theater Ticket",
       "description": "Experience a live performance.",
-      "image": "https://via.placeholder.com/150"
+      "image_path": "https://via.placeholder.com/150"
     }
   ]
   
