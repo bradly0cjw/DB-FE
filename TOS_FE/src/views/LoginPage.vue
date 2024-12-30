@@ -60,17 +60,17 @@ export default {
           password: this.password,
         });
 
-        const { token, userType } = response.data;
-
+        const { token, role  } = response.data;
+        console.log("Login successful:", token, role );
         localStorage.setItem("authToken", token);
-
+        
         // 根據 userType 跳轉
-        if (userType === "user") {
+        if (role  === "user") {
           this.$router.push("/");
-        } else if (userType === "seller") {
+        } else if (role  === "seller") {
           this.$router.push("/seller/dashboard");
         } 
-        else if (userType === "admin") {
+        else if (role  === "admin") {
           this.$router.push("/admin");
         }else {
           this.error = "Unknown user type.";
