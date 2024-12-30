@@ -7,7 +7,7 @@ import TicketDetail from "@/views/TicketDetail.vue";
 import CartPage from '@/views/CartPage.vue';
 import OrderPage from '@/views/OrderPage.vue';
 import Search from "@/views/Search.vue";
-
+import Dashboard from '@/views/Dashboard.vue';
 
 const routes = [
   {
@@ -50,7 +50,12 @@ const routes = [
     name: 'Search',
     component: Search,
   },
- 
+  {
+    path: "/seller/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
+    meta: { requiresSeller: true }, 
+  },
 
 ];
 

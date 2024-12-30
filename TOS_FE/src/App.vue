@@ -134,7 +134,7 @@ body {
 
 .search-input button {
   padding: 5px 10px;
-  background-color: #007bff;
+  background-color: #4CAF50;
   color: white;
   border: none;
   cursor: pointer;

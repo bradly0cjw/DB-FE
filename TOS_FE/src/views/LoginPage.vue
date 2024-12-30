@@ -1,34 +1,72 @@
 <template>
   <div class="login-page">
-    <h1>Login</h1>
-    <form @submit.prevent="handleLogin">
-      <div>
-        <label for="email">Email:</label>
-        <input type="email" v-model="email" id="email" required />
+    <div class="login-header">
+      <h1>Login Portal</h1>
+      <p>Please select your login type below</p>
+    </div>
+    <div class="login-container">
+      <!-- User Login -->
+      <div class="login-card">
+        <h2>User Login</h2>
+        <form @submit.prevent="handleUserLogin">
+          <div class="form-group">
+            <label for="userEmail">Email</label>
+            <input type="email" v-model="userEmail" id="userEmail" placeholder="Enter your email" required />
+          </div>
+          <div class="form-group">
+            <label for="userPassword">Password</label>
+            <input type="password" v-model="userPassword" id="userPassword" placeholder="Enter your password" required />
+          </div>
+          <button type="submit" class="btn">Login</button>
+          <p v-if="userError" class="error">{{ userError }}</p>
+        </form>
       </div>
-      <div>
-        <label for="password">Password:</label>
-        <input type="password" v-model="password" id="password" required />
+
+      <!-- Seller Login -->
+      <div class="login-card">
+        <h2>Seller Login</h2>
+        <form @submit.prevent="handleSellerLogin">
+          <div class="form-group">
+            <label for="sellerEmail">Email</label>
+            <input type="email" v-model="sellerEmail" id="sellerEmail" placeholder="Enter your email" required />
+          </div>
+          <div class="form-group">
+            <label for="sellerPassword">Password</label>
+            <input type="password" v-model="sellerPassword" id="sellerPassword" placeholder="Enter your password" required />
+          </div>
+          <button type="submit" class="btn">Login</button>
+          <p v-if="sellerError" class="error">{{ sellerError }}</p>
+        </form>
       </div>
-      <button type="submit">Login</button>
-      <p v-if="error" class="error">{{ error }}</p>
-    </form>
+    </div>
   </div>
 </template>
 
+
+
 <script>
 import axios from 'axios';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
     return {
-      email: "",
-      password: "",
-      error: null, // 儲存錯誤訊息
+      // User login data
+      userEmail: '',
+      userPassword: '',
+      userError: null,
+
+      // Seller login data
+      sellerEmail: '',
+      sellerPassword: '',
+      sellerError: null,
     };
   },
   methods: {
-    async handleLogin() {
+    ...mapActions('user', ['login']),
+    
+    // Handle user login
+    async handleUserLogin() {
       try {
         const apiUrl = process.env.VUE_APP_API_URL;
         const response = await axios.post(`${apiUrl}/login`, {
@@ -41,15 +79,28 @@ export default {
 
         // 儲存 token（此處使用 localStorage）
         localStorage.setItem("userToken", token);
-
-        // 更新 App.vue 中的狀態
-        this.$root.isLoggedIn = true;
-
-        // 跳轉到首頁
+        this.login(userInfo);
         this.$router.push("/");
       } catch (error) {
-        console.error('Failed to login:', error);
-        this.error = 'Invalid email or password. Please try again.';
+        console.error('User login failed:', error);
+        this.userError = 'Invalid email or password. Please try again.';
+      }
+    },
+
+    // Handle seller login
+    async handleSellerLogin() {
+      try {
+        const response = await axios.post('/api/login', {
+          email: this.sellerEmail,
+          password: this.sellerPassword,
+        });
+        const { token, userInfo } = response.data;
+        localStorage.setItem("sellerToken", token);
+        this.login(userInfo);
+        this.$router.push("/seller/dashboard");  // Redirect to seller dashboard
+      } catch (error) {
+        console.error('Seller login failed:', error);
+        this.sellerError = 'Invalid email or password. Please try again.';
       }
     },
   },
@@ -57,32 +108,117 @@ export default {
 </script>
 
 <style scoped>
+/* 整體頁面設計 */
 .login-page {
-  max-width: 400px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #2b2b2b;
+  color: #e0e0e0;
+  font-family: 'Arial', sans-serif;
   padding: 20px;
-  border: 1px solid #ccc;
+}
+
+/* 頁面標題 */
+.login-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.login-header h1 {
+  font-size: 72px;
+  color: #ffffff;
+}
+
+.login-header p {
+  font-size: 16px;
+  color: #bbbbbb;
+}
+
+/* 登入容器 */
+.login-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 50px;
+  width: 100%;
+  max-width: 1500px;
+}
+
+/* 登入卡片 */
+.login-card {
+  background-color: #3c3c3c;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.login-card h2 {
+  margin-bottom: 36px;
+  font-size: 24px;
+  color: #ffffff;
+}
+
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #bbbbbb;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #555555;
   border-radius: 5px;
+  background-color: #2b2b2b;
+  color: #e0e0e0;
+  box-sizing: border-box;
 }
 
-form div {
-  margin-bottom: 15px;
+.form-group input::placeholder {
+  color: #888888;
 }
 
-button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
+.form-group input:focus {
+  border-color: #888888;
+  outline: none;
+}
+
+/* 按鈕樣式 */
+.btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #4CAF50;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  transition: all 0.3s;
 }
 
-button:hover {
-  background-color: #0056b3;
+.btn:hover {
+  background-color: #666666;
 }
 
+/* 錯誤消息 */
 .error {
-  color: red;
+  color: #ff4d4d;
   margin-top: 10px;
+  font-size: 14px;
 }
 </style>
