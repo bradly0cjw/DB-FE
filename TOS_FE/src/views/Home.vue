@@ -12,6 +12,7 @@
 <script>
 import axios from 'axios';
 import EventCard from "@/components/EventCard.vue";
+import testEvents from '@/data/test.json'; // 引入本地的 test.json 文件(測試用)
 
 export default {
   name: "Home",
@@ -29,9 +30,12 @@ export default {
   methods: {
     async fetchEvents() {
       try {
-        const apiUrl = process.env.VUE_APP_API_URL;
-        const response = await axios.get(`${apiUrl}/events`);
-        this.events = response.data;
+        // const apiUrl = process.env.VUE_APP_API_URL;
+        // const response = await axios.get(`${apiUrl}/events`);
+        // this.events = response.data;
+
+        // 改成讀取本地的 test.json 文件(測試用)
+        this.events = testEvents;
       } catch (error) {
         console.error('Error fetching events:', error);
       }

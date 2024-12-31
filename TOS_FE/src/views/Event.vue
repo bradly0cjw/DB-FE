@@ -12,6 +12,7 @@
 <script>
 import axios from 'axios';
 import EventCard from '@/components/EventCard.vue';
+import testEvents from '@/data/test.json'; // 引入本地的 test.json 文件
 
 export default {
   name: 'Event',
@@ -21,19 +22,24 @@ export default {
   data() {
     return {
       events: [],
+      query: '', // 可以根據需要設置查詢條件
     };
   },
-  created() {
-    this.fetchEvents();
+  async created() {
+    await this.fetchEvents();
   },
   methods: {
     async fetchEvents() {
       try {
-        const apiUrl = process.env.VUE_APP_API_URL;
-        const response = await axios.get(`${apiUrl}/events`);
-        this.events = response.data;
+        // 暫時註解掉接 API 的部分
+        // const apiUrl = process.env.VUE_APP_API_URL;
+        // const response = await axios.get(`${apiUrl}/events/search?q=${this.query}`);
+        // this.events = response.data;
+
+        // 改成讀取本地的 test.json 文件
+        this.events = testEvents;
       } catch (error) {
-        console.error('Error fetching events:', error);
+        console.error('Failed to fetch events:', error);
       }
     },
   },
@@ -41,8 +47,44 @@ export default {
 </script>
 
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-5 {
+  margin-top: 3rem;
+}
+
+.mt-4 {
+  margin-top: 1.5rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.col-md-4 {
+  flex: 1 1 calc(33.333% - 20px);
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .col-md-4 {
+    flex: 1 1 calc(50% - 20px);
+  }
+}
+
+@media (max-width: 576px) {
+  .col-md-4 {
+    flex: 1 1 100%;
+  }
 }
 </style>

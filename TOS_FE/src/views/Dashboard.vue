@@ -1,4 +1,4 @@
-<template>
+<template> 
   <div class="dashboard-container">
     <!-- 活動管理區 -->
     <div class="card event-management">
@@ -28,8 +28,17 @@
           <li v-for="event in events" :key="event.id" class="event-item">
             <p><strong>{{ event.name }}</strong> ({{ event.date }})</p>
             <p>{{ event.description }}</p>
-            <button @click="editEvent(event)">修改活動</button>
-            <button @click="deleteEvent(event.id)">刪除活動</button>
+            <div class="action-buttons">
+              <button @click="editEvent(event)" class="btn edit-btn">
+                <i class="fas fa-edit"></i> 修改活動
+              </button>
+              <button @click="editTicket(ticket)" class="btn editT-btn">
+                <i class="fas fa-edit"></i> 修改活動票券
+              </button>
+              <button @click="deleteEvent(event.id)" class="btn delete-btn">
+                <i class="fas fa-trash-alt"></i> 刪除活動
+              </button>
+            </div>
           </li>
         </ul>
       </div>
@@ -74,8 +83,15 @@
           <li v-for="coupon in coupons" :key="coupon.id" class="coupon-item">
             <p><strong>{{ coupon.code }}</strong> - {{ coupon.discount }}% off</p>
             <p>過期日期: {{ coupon.expiration }}</p>
-            <button @click="editCoupon(coupon)">修改優惠券</button>
-            <button @click="deleteCoupon(coupon.id)">刪除優惠券</button>
+            <p>類型: {{ coupon.type }}</p>
+            <div class="action-buttons">
+              <button @click="editCoupon(coupon)" class="btn edit-btn">
+                <i class="fas fa-edit"></i> 修改優惠券
+              </button>
+              <button @click="deleteCoupon(coupon.id)" class="btn delete-btn">
+                <i class="fas fa-trash-alt"></i> 刪除優惠券
+              </button>
+            </div>
           </li>
         </ul>
       </div>
@@ -88,133 +104,129 @@
 
 <script>
 import axios from 'axios';
+import testEvents from '@/data/test.json'; // 引入本地的 test.json 文件
 
 export default {
   data() {
     return {
-      events: [], // 已建立的活動列表
+      events: [],
       eventForm: {
+        id: null,
         name: '',
         date: '',
         description: ''
       },
-      coupons: [], // 已建立的優惠券列表
+      coupons: [],
       couponForm: {
+        id: null,
         code: '',
         discount: '',
+        type: 'total',
         expiration: ''
       }
     };
   },
   mounted() {
-    this.fetchEvents(); // 獲取活動列表
-    this.fetchCoupons(); // 獲取優惠券列表
+    this.fetchEvents();
+    this.fetchCoupons();
   },
   methods: {
-    // 獲取活動列表
     async fetchEvents() {
       try {
-        const apiUrl = process.env.VUE_APP_API_URL;
-        const response = await axios.get(`${apiUrl}/events`);
-        this.events = Array.isArray(response.data) ? response.data : [];
+        // const apiUrl = process.env.VUE_APP_API_URL;
+        // const response = await axios.get(`${apiUrl}/events`);
+        // this.events = response.data;
+
+        // 改成讀取本地的 test.json 文件
+        this.events = testEvents;
       } catch (error) {
-        console.error('Failed to fetch events:', error);
-        this.events = [];
+        console.error("Failed to fetch events:", error);
       }
     },
-
-    // 獲取優惠券列表
     async fetchCoupons() {
       try {
-        const apiUrl = process.env.VUE_APP_API_URL;
-        const response = await axios.get(`${apiUrl}/coupons`);
-        this.coupons = Array.isArray(response.data) ? response.data : [];
+        // const apiUrl = process.env.VUE_APP_API_URL;
+        // const response = await axios.get(`${apiUrl}/coupons`);
+        // this.coupons = response.data;
+
+        // 改成讀取本地的 test.json 文件
+        this.coupons = testEvents.flatMap(event => event.tickets);
       } catch (error) {
-        console.error('Failed to fetch coupons:', error);
-        this.coupons = [];
+        console.error("Failed to fetch coupons:", error);
       }
     },
-
-    // 提交活動
     async submitEvent() {
       try {
-        const apiUrl = process.env.VUE_APP_API_URL;
-        let response;
+        // const apiUrl = process.env.VUE_APP_API_URL;
+        // if (this.eventForm.id) {
+        //   await axios.put(`${apiUrl}/events/${this.eventForm.id}`, this.eventForm);
+        // } else {
+        //   await axios.post(`${apiUrl}/events`, this.eventForm);
+        // }
+        // this.fetchEvents();
+        // this.eventForm = { id: null, name: '', date: '', description: '' };
+
+        // 改成本地操作
         if (this.eventForm.id) {
-          response = await axios.put(`${apiUrl}/events/${this.eventForm.id}`, this.eventForm);
+          const index = this.events.findIndex(event => event.id === this.eventForm.id);
+          if (index !== -1) {
+            this.events.splice(index, 1, { ...this.eventForm });
+          }
         } else {
-          response = await axios.post(`${apiUrl}/events`, this.eventForm);
+          this.events.push({ ...this.eventForm, id: Date.now() });
         }
-        if (response.status === 200) {
-          this.fetchEvents();
-          this.eventForm = { name: '', date: '', description: '' };
-        }
+        this.eventForm = { id: null, name: '', date: '', description: '' };
       } catch (error) {
-        console.error('Failed to submit event:', error);
+        console.error("Failed to submit event:", error);
       }
     },
-
-    // 提交優惠券
     async submitCoupon() {
       try {
-        const apiUrl = process.env.VUE_APP_API_URL;
-        let response;
-        console.log(this.couponForm.id);
+        // const apiUrl = process.env.VUE_APP_API_URL;
+        // if (this.couponForm.id) {
+        //   await axios.put(`${apiUrl}/coupons/${this.couponForm.id}`, this.couponForm);
+        // } else {
+        //   await axios.post(`${apiUrl}/coupons`, this.couponForm);
+        // }
+        // this.fetchCoupons();
+        // this.couponForm = { id: null, code: '', discount: '', type: 'total', expiration: '' };
+
+        // 改成本地操作
         if (this.couponForm.id) {
-          response = await axios.put(`${apiUrl}/coupons/${this.couponForm.id}`, this.couponForm);
-          console.log("@@");
-        } else {
-          response = await axios.post(`${apiUrl}/coupons`, {
-            code: this.couponForm.code,
-            type: this.couponForm.type,
-            discount: this.couponForm.discount,
-            expiration: this.couponForm.expiration
+          const index = this.coupons.findIndex(coupon => coupon.id === this.couponForm.id);
+          if (index !== -1) {
+            this.coupons.splice(index, 1, { ...this.couponForm });
           }
-          );
-          console.log("@");
+        } else {
+          this.coupons.push({ ...this.couponForm, id: Date.now() });
         }
-        if (response.status === 200) {
-          this.fetchCoupons();
-          this.couponForm = { code: '', discount: '', expiration: '' };
-        }
+        this.couponForm = { id: null, code: '', discount: '', type: 'total', expiration: '' };
       } catch (error) {
-        console.error('Failed to submit coupon:', error);
+        console.error("Failed to submit coupon:", error);
       }
     },
-
-    // 編輯活動
-    editEvent(event) {
-      this.eventForm = { ...event };
-    },
-
-    // 刪除活動
     async deleteEvent(eventId) {
-      const apiUrl = process.env.VUE_APP_API_URL;
       try {
-        const response = await axios.delete(`${apiUrl}/events/${eventId}`);
-        if (response.status === 200) {
-          this.fetchEvents();
-        }
+        // const apiUrl = process.env.VUE_APP_API_URL;
+        // await axios.delete(`${apiUrl}/events/${eventId}`);
+        // this.fetchEvents();
+
+        // 改成本地操作
+        this.events = this.events.filter(event => event.id !== eventId);
       } catch (error) {
-        console.error('Failed to delete event:', error);
+        console.error("Failed to delete event:", error);
       }
     },
-
-    // 編輯優惠券
-    editCoupon(coupon) {
-      this.couponForm = { ...coupon };
-    },
-
-    // 刪除優惠券
     async deleteCoupon(couponId) {
-      const apiUrl = process.env.VUE_APP_API_URL;
       try {
-        const response = await axios.delete(`${apiUrl}/coupons/${couponId}`);
-        if (response.status === 200) {
-          this.fetchCoupons();
-        }
+        // const apiUrl = process.env.VUE_APP_API_URL;
+        // await axios.delete(`${apiUrl}/coupons/${couponId}`);
+        // this.fetchCoupons();
+
+        // 改成本地操作
+        this.coupons = this.coupons.filter(coupon => coupon.id !== couponId);
       } catch (error) {
-        console.error('Failed to delete coupon:', error);
+        console.error("Failed to delete coupon:", error);
       }
     }
   }
@@ -284,15 +296,62 @@ export default {
   transition: background-color 0.3s ease;
 }
 
-.btn:hover {
-  background-color: #45a049;
-}
-
 .event-item,
 .coupon-item {
   margin-bottom: 20px;
   padding: 10px;
-  background-color: #2b2b3c;
+  background-color: #5B5B5B;
   border-radius: 5px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #ffffff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn i {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.btn:hover {
+  background-color: #45a049;
+}
+
+.edit-btn {
+  background-color: #007bff;
+}
+
+.edit-btn:hover {
+  background-color: #0056b3;
+}
+
+.editT-btn {
+  background-color: #4CAF50;
+}
+
+.editT-btn:hover {
+  background-color: #45a049;
+}
+
+.delete-btn {
+  background-color: #ff4d4d;
+}
+
+.delete-btn:hover {
+  background-color: #e60000;
 }
 </style>

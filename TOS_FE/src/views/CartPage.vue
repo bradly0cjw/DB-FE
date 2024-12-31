@@ -22,28 +22,32 @@
 
 <script>
 import axios from 'axios';
+import testEvents from '@/data/test.json'; // 引入本地的 test.json 文件
 
 export default {
   data() {
     return {
-      cartItems: [], // 購物車項目默認為空數組
+      cartItems: [],
     };
   },
   mounted() {
-    this.fetchCartItems(); // 頁面加載後獲取購物車項目
+    this.fetchCartItems();
   },
   methods: {
     async fetchCartItems() {
       try {
-        const apiUrl = process.env.VUE_APP_API_URL;
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const cartItems = await Promise.all(
-          cart.map(async (ticketId) => {
-            const response = await axios.get(`${apiUrl}/tickets/${ticketId}`);
-            return response.data;
-          })
-        );
-        this.cartItems = cartItems;
+        // const apiUrl = process.env.VUE_APP_API_URL;
+        // const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        // const cartItems = await Promise.all(
+        //   cart.map(async (ticketId) => {
+        //     const response = await axios.get(`${apiUrl}/tickets/${ticketId}`);
+        //     return response.data;
+        //   })
+        // );
+        // this.cartItems = cartItems;
+
+        // 改成讀取本地的 test.json 文件
+        this.cartItems = testEvents.flatMap(event => event.tickets);
       } catch (error) {
         console.error('Failed to fetch cart items:', error);
         this.cartItems = [];

@@ -71,89 +71,106 @@
   </template>
   
   <script>
-  import axios from 'axios';
-  
-  export default {
-    data() {
-      return {
-        users: [], // 用戶資料
-        sellers: [], // 賣家資料
-        loadingUsers: true,  // 表示用戶資料是否加載
-        loadingSellers: true,  // 表示賣家資料是否加載
-      };
+import axios from 'axios';
+import testEvents from '@/data/test.json'; // 引入本地的 test.json 文件
+
+export default {
+  data() {
+    return {
+      users: [],
+      sellers: [],
+      loadingUsers: true,
+      loadingSellers: true,
+    };
+  },
+  methods: {
+    async fetchUsers() {
+      try {
+        // const response = await axios.get('/api/users'); // 替換為你的 API 路徑
+        // this.users = Array.isArray(response.data) ? response.data : [];
+
+        // 改成讀取本地的 test.json 文件
+        this.users = testEvents.flatMap(event => event.tickets);
+      } catch (error) {
+        console.error('Failed to fetch users:', error);
+        this.users = [];
+      } finally {
+        this.loadingUsers = false;
+      }
     },
-    methods: {
-      async fetchUsers() {
-        try {
-          const response = await axios.get('/api/users'); // 替換為你的 API 路徑
-          this.users = Array.isArray(response.data) ? response.data : [];
-        } catch (error) {
-          console.error('Failed to fetch users:', error);
-          this.users = [];
-        } finally {
-          this.loadingUsers = false; // 資料加載完成，設為 false
-        }
-      },
-      async fetchSellers() {
-        try {
-          const response = await axios.get('/api/sellers'); // 替換為你的 API 路徑
-          this.sellers = Array.isArray(response.data) ? response.data : [];
-        } catch (error) {
-          console.error('Failed to fetch sellers:', error);
-          this.sellers = [];
-        } finally {
-          this.loadingSellers = false; // 資料加載完成，設為 false
-        }
-      },
-      updateUser(user) {
-        axios
-          .put(`/api/users/${user.id}`, user)
-          .then(response => {
-            console.log("User updated successfully:", response.data);
-          })
-          .catch(error => {
-            console.error("There was an error updating the user:", error);
-          });
-      },
-      deleteUser(userId) {
-        axios
-          .delete(`/api/users/${userId}`)
-          .then(response => {
-            this.users = this.users.filter(user => user.id !== userId);
-            console.log("User deleted successfully:", response.data);
-          })
-          .catch(error => {
-            console.error("There was an error deleting the user:", error);
-          });
-      },
-      updateSeller(seller) {
-        axios
-          .put(`/api/sellers/${seller.id}`, seller)
-          .then(response => {
-            console.log("Seller updated successfully:", response.data);
-          })
-          .catch(error => {
-            console.error("There was an error updating the seller:", error);
-          });
-      },
-      deleteSeller(sellerId) {
-        axios
-          .delete(`/api/sellers/${sellerId}`)
-          .then(response => {
-            this.sellers = this.sellers.filter(seller => seller.id !== sellerId);
-            console.log("Seller deleted successfully:", response.data);
-          })
-          .catch(error => {
-            console.error("There was an error deleting the seller:", error);
-          });
-      },
+    async fetchSellers() {
+      try {
+        // const response = await axios.get('/api/sellers'); // 替換為你的 API 路徑
+        // this.sellers = Array.isArray(response.data) ? response.data : [];
+
+        // 改成讀取本地的 test.json 文件
+        this.sellers = testEvents.flatMap(event => event.tickets);
+      } catch (error) {
+        console.error('Failed to fetch sellers:', error);
+        this.sellers = [];
+      } finally {
+        this.loadingSellers = false;
+      }
     },
-    created() {
-      this.fetchUsers();  // 加載用戶資料
-      this.fetchSellers();  // 加載賣家資料
+    updateUser(user) {
+      // axios.put(`/api/users/${user.id}`, user)
+      //   .then(response => {
+      //     console.log("User updated successfully:", response.data);
+      //   })
+      //   .catch(error => {
+      //     console.error("There was an error updating the user:", error);
+      //   });
+
+      // 改成本地操作
+      console.log("User updated successfully:", user);
     },
-  };
-  </script>
+    deleteUser(userId) {
+      // axios.delete(`/api/users/${userId}`)
+      //   .then(response => {
+      //     this.users = this.users.filter(user => user.id !== userId);
+      //     console.log("User deleted successfully:", response.data);
+      //   })
+      //   .catch(error => {
+      //     console.error("There was an error deleting the user:", error);
+      //   });
+
+      // 改成本地操作
+      this.users = this.users.filter(user => user.id !== userId);
+      console.log("User deleted successfully:", userId);
+    },
+    updateSeller(seller) {
+      // axios.put(`/api/sellers/${seller.id}`, seller)
+      //   .then(response => {
+      //     console.log("Seller updated successfully:", response.data);
+      //   })
+      //   .catch(error => {
+      //     console.error("There was an error updating the seller:", error);
+      //   });
+
+      // 改成本地操作
+      console.log("Seller updated successfully:", seller);
+    },
+    deleteSeller(sellerId) {
+      // axios.delete(`/api/sellers/${sellerId}`)
+      //   .then(response => {
+      //     this.sellers = this.sellers.filter(seller => seller.id !== sellerId);
+      //     console.log("Seller deleted successfully:", response.data);
+      //   })
+      //   .catch(error => {
+      //     console.error("There was an error deleting the seller:", error);
+      //   });
+
+      // 改成本地操作
+      this.sellers = this.sellers.filter(seller => seller.id !== sellerId);
+      console.log("Seller deleted successfully:", sellerId);
+    },
+  },
+  created() {
+    this.fetchUsers();
+    this.fetchSellers();
+  },
+};
+</script>
   
   <style scoped>
   h1 {

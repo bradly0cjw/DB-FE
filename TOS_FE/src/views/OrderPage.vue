@@ -27,6 +27,7 @@
 
 <script>
 import axios from 'axios';
+import testEvents from '@/data/test.json'; // 引入本地的 test.json 文件
 
 export default {
   data() {
@@ -45,19 +46,26 @@ export default {
   methods: {
     async fetchOrderItems() {
       try {
-        const response = await axios.get('/api/order'); // Replace with your API path
-        this.orderItems = response.data;
+        // const response = await axios.get('/api/order'); // Replace with your API path
+        // this.orderItems = response.data;
+
+        // 改成讀取本地的 test.json 文件
+        this.orderItems = testEvents.flatMap(event => event.tickets);
       } catch (error) {
         console.error('Failed to fetch order items:', error);
       }
     },
     async cancelOrder(itemId) {
       try {
-        const response = await axios.delete(`/api/order/${itemId}`); // Replace with your cancel API path
-        if (response.status === 200) {
-          this.orderItems = this.orderItems.filter(item => item.id !== itemId);
-          alert('Ticket successfully canceled');
-        }
+        // const response = await axios.delete(`/api/order/${itemId}`); // Replace with your cancel API path
+        // if (response.status === 200) {
+        //   this.orderItems = this.orderItems.filter(item => item.id !== itemId);
+        //   alert('Ticket successfully canceled');
+        // }
+
+        // 改成本地操作
+        this.orderItems = this.orderItems.filter(item => item.id !== itemId);
+        alert('Ticket successfully canceled');
       } catch (error) {
         console.error('Failed to cancel the order:', error);
         alert('Failed to cancel the ticket');
