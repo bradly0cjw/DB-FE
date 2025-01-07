@@ -36,18 +36,18 @@ export default {
   methods: {
     async fetchCartItems() {
       try {
-        // const apiUrl = process.env.VUE_APP_API_URL;
-        // const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        // const cartItems = await Promise.all(
-        //   cart.map(async (ticketId) => {
-        //     const response = await axios.get(`${apiUrl}/tickets/${ticketId}`);
-        //     return response.data;
-        //   })
-        // );
-        // this.cartItems = cartItems;
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartItems = await Promise.all(
+          cart.map(async (ticketId) => {
+            const response = await axios.get(`${apiUrl}/tickets/${ticketId}`);
+            return response.data;
+          })
+        );
+        this.cartItems = cartItems;
 
         // 改成讀取本地的 test.json 文件
-        this.cartItems = testEvents.flatMap(event => event.tickets);
+        //this.cartItems = testEvents.flatMap(event => event.tickets);
       } catch (error) {
         console.error('Failed to fetch cart items:', error);
         this.cartItems = [];

@@ -47,6 +47,7 @@
 
 <script>
 import axios from 'axios';
+import testEvents from '@/data/test.json'; // 引入本地的 test.json 文件
 
 export default {
   data() {
@@ -62,50 +63,62 @@ export default {
         birthDate: '',
         paymentInfo: ''
       },
-      updateStatus: null, 
-      coupons: [] 
+      updateStatus: null,
+      coupons: []
     };
   },
   mounted() {
-    this.fetchUserInfo(); // 頁面加載後獲取用戶信息
-    this.fetchCoupons(); // 獲取用戶的優惠券
+    this.fetchUserInfo();
+    this.fetchCoupons();
   },
   methods: {
     async fetchUserInfo() {
       try {
-        const apiUrl = process.env.VUE_APP_API_URL;
-        const token = localStorage.getItem('authToken');
-        const response = await axios.get(`${apiUrl}/user`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        this.userInfo = response.data;
+        // const apiUrl = process.env.VUE_APP_API_URL;
+        // const token = localStorage.getItem('authToken');
+        // const response = await axios.get(`${apiUrl}/user`, {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`
+        //   }
+        // });
+        // this.userInfo = response.data;
+        // this.updatedUserInfo = { ...this.userInfo };
+
+        // 改成讀取本地的 test.json 文件
+        this.userInfo = testEvents[0].tickets[0];
         this.updatedUserInfo = { ...this.userInfo };
       } catch (error) {
         console.error('Failed to fetch user info:', error);
       }
     },
-    
     async fetchCoupons() {
       try {
-        const response = await axios.get('/api/coupons'); // 替換為您的 API 路徑
-        this.coupons = Array.isArray(response.data) ? response.data : [];
+        // const response = await axios.get('/api/coupons');
+        // this.coupons = Array.isArray(response.data) ? response.data : [];
+
+        // 改成讀取本地的 test.json 文件
+        this.coupons = testEvents.flatMap(event => event.tickets);
       } catch (error) {
         console.error('Failed to fetch coupons:', error);
-        this.coupons = []; // 發生錯誤時也設為空數組，避免界面顯示問題
+        this.coupons = [];
       }
     },
-    
     async updateUserInfo() {
       try {
-        const response = await axios.put('/api/user', this.updatedUserInfo); // 替換為你的 API 路徑
+        const response = await axios.put('/api/user', this.updatedUserInfo);
         if (response.status === 200) {
           this.updateStatus = { success: true, message: '更新成功！' };
           this.userInfo = { ...this.updatedUserInfo };
         } else {
           this.updateStatus = { success: false, message: '更新失敗，請稍後再試。' };
         }
+
+        // 改成本地操作
+        /*
+        this.updateStatus = { success: true, message: '更新成功！' };
+        this.userInfo = { ...this.updatedUserInfo };
+        */
+
       } catch (error) {
         console.error('Failed to update user info:', error);
         this.updateStatus = { success: false, message: '出現錯誤，請稍後再試。' };
@@ -115,6 +128,7 @@ export default {
 };
 </script>
 
+
 <style scoped>
 /* 全局容器樣式 */
 .user-container {
@@ -123,7 +137,7 @@ export default {
   padding: 20px;
   display: grid;
   grid-gap: 20px;
-  grid-template-columns: 1fr; /* 單列模式，適應所有屏幕 */
+  grid-template-columns: 1fr; 
 }
 
 /* 卡片樣式 */

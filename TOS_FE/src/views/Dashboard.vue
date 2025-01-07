@@ -207,24 +207,26 @@ export default {
     },
     async deleteEvent(eventId) {
       try {
-        // const apiUrl = process.env.VUE_APP_API_URL;
-        // await axios.delete(`${apiUrl}/events/${eventId}`);
-        // this.fetchEvents();
+        const apiUrl = process.env.VUE_APP_API_URL;
+        await axios.delete(`${apiUrl}/events/${eventId}`);
+        this.fetchEvents();
 
         // 改成本地操作
-        this.events = this.events.filter(event => event.id !== eventId);
+        //this.events = this.events.filter(event => event.id !== eventId);
+
       } catch (error) {
         console.error("Failed to delete event:", error);
       }
     },
     async deleteCoupon(couponId) {
       try {
-        // const apiUrl = process.env.VUE_APP_API_URL;
-        // await axios.delete(`${apiUrl}/coupons/${couponId}`);
-        // this.fetchCoupons();
+        const apiUrl = process.env.VUE_APP_API_URL;
+        await axios.delete(`${apiUrl}/coupons/${couponId}`);
+        this.fetchCoupons();
 
         // 改成本地操作
-        this.coupons = this.coupons.filter(coupon => coupon.id !== couponId);
+        //this.coupons = this.coupons.filter(coupon => coupon.id !== couponId);
+
       } catch (error) {
         console.error("Failed to delete coupon:", error);
       }

@@ -64,6 +64,9 @@ export default {
         console.log("Login successful:", token, role );
         localStorage.setItem("authToken", token);
         
+        // 更新 user.js 中的狀態
+        userState.setUser(userInfo);
+
         // 根據 userType 跳轉
         if (role  === "user") {
           this.$router.push("/");

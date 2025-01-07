@@ -190,15 +190,18 @@ export default {
     },
     async saveNewTicket() {
       try {
-        // const response = await axios.post('/tickets', this.newTicket);
-        // this.tickets.push(response.data);
-        // this.newTicket = {};
-        // alert('New ticket added successfully!');
+        const response = await axios.post('/tickets', this.newTicket);
+        this.tickets.push(response.data);
+        this.newTicket = {};
+        alert('New ticket added successfully!');
 
         // 改成本地操作
+        /*
         this.tickets.push({ ...this.newTicket, id: Date.now() });
         this.newTicket = {};
         alert('New ticket added successfully!');
+        */
+
       } catch (error) {
         console.error('Failed to add new ticket:', error);
         alert('Failed to add new ticket. Please try again later.');

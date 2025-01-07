@@ -32,12 +32,12 @@ export default {
     async fetchEvents() {
       try {
         // 暫時註解掉接 API 的部分
-        // const apiUrl = process.env.VUE_APP_API_URL;
-        // const response = await axios.get(`${apiUrl}/events/search?q=${this.query}`);
-        // this.events = response.data;
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const response = await axios.get(`${apiUrl}/events/search?q=${this.query}`);
+        this.events = response.data;
 
         // 改成讀取本地的 test.json 文件
-        this.events = testEvents;
+        //this.events = testEvents;
       } catch (error) {
         console.error('Failed to fetch events:', error);
       }

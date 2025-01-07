@@ -139,30 +139,32 @@ export default {
       console.log("User deleted successfully:", userId);
     },
     updateSeller(seller) {
-      // axios.put(`/api/sellers/${seller.id}`, seller)
-      //   .then(response => {
-      //     console.log("Seller updated successfully:", response.data);
-      //   })
-      //   .catch(error => {
-      //     console.error("There was an error updating the seller:", error);
-      //   });
+      axios.put(`/api/sellers/${seller.id}`, seller)
+        .then(response => {
+          console.log("Seller updated successfully:", response.data);
+        })
+        .catch(error => {
+          console.error("There was an error updating the seller:", error);
+        });
 
       // 改成本地操作
-      console.log("Seller updated successfully:", seller);
+      //console.log("Seller updated successfully:", seller);
     },
     deleteSeller(sellerId) {
-      // axios.delete(`/api/sellers/${sellerId}`)
-      //   .then(response => {
-      //     this.sellers = this.sellers.filter(seller => seller.id !== sellerId);
-      //     console.log("Seller deleted successfully:", response.data);
-      //   })
-      //   .catch(error => {
-      //     console.error("There was an error deleting the seller:", error);
-      //   });
+      axios.delete(`/api/sellers/${sellerId}`)
+        .then(response => {
+          this.sellers = this.sellers.filter(seller => seller.id !== sellerId);
+          console.log("Seller deleted successfully:", response.data);
+        })
+        .catch(error => {
+          console.error("There was an error deleting the seller:", error);
+        });
 
       // 改成本地操作
+      /*
       this.sellers = this.sellers.filter(seller => seller.id !== sellerId);
       console.log("Seller deleted successfully:", sellerId);
+      */
     },
   },
   created() {

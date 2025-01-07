@@ -41,7 +41,13 @@ export default {
         const apiUrl = process.env.VUE_APP_API_URL;
         const response = await axios.get(`${apiUrl}/events/search?q=${query}`);
         this.events = response.data;
+
+        // 改成讀取本地的 test.json 文件
+        /*
+        this.events = testEvents.filter(event => event.event_name.includes(query));
         console.log(this.events);
+        */
+
       } catch (error) {
         console.error('Failed to fetch search results:', error);
         this.events = [];

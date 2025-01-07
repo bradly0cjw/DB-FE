@@ -57,15 +57,18 @@ export default {
     },
     async cancelOrder(itemId) {
       try {
-        // const response = await axios.delete(`/api/order/${itemId}`); // Replace with your cancel API path
-        // if (response.status === 200) {
-        //   this.orderItems = this.orderItems.filter(item => item.id !== itemId);
-        //   alert('Ticket successfully canceled');
-        // }
+        const response = await axios.delete(`/api/order/${itemId}`); // Replace with your cancel API path
+        if (response.status === 200) {
+          this.orderItems = this.orderItems.filter(item => item.id !== itemId);
+          alert('Ticket successfully canceled');
+        }
 
         // 改成本地操作
+        /*
         this.orderItems = this.orderItems.filter(item => item.id !== itemId);
         alert('Ticket successfully canceled');
+        */
+
       } catch (error) {
         console.error('Failed to cancel the order:', error);
         alert('Failed to cancel the ticket');
