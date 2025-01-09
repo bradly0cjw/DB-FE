@@ -30,6 +30,13 @@
                 <button @click="searchEvents">Go</button>
               </div>
             </li>
+            <!-- Conditional Buttons for Seller and Admin -->
+            <li v-if="userState.isSeller" class="nav-item">
+              <router-link to="/seller/dashboard" class="nav-link">Dashboard</router-link>
+            </li>
+            <li v-if="userState.isAdmin" class="nav-item">
+              <router-link to="/admin" class="nav-link">Admin</router-link>
+            </li>
           </ul>
           <ul class="navbar-nav">
             <li class="nav-item dropdown">
@@ -44,7 +51,7 @@
                 User
               </a>
               <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
-                <li v-if="!isLoggedIn">
+                <li v-if="!userState.isLoggedIn">
                   <router-link to="/login" class="dropdown-item">Log In</router-link>
                 </li>
                 <li v-else>
@@ -52,16 +59,16 @@
                 </li>
                 <li>
                   <router-link
-                    :to="isLoggedIn ? '/cart' : '/login'"
+                    :to="userState.isLoggedIn ? '/cart' : '/login'"
                     class="dropdown-item"
                   >
                     Cart
                   </router-link>
                 </li>
-                <li v-if="isLoggedIn">
+                <li v-if="userState.isLoggedIn">
                   <router-link to="/orders" class="dropdown-item">Order</router-link>
-                </li>               
-                <li v-if="isLoggedIn">
+                </li>
+                <li v-if="userState.isLoggedIn">
                   <a class="dropdown-item" href="#" @click="logout">Log Out</a>
                 </li>
               </ul>
@@ -77,39 +84,33 @@
 </template>
 
 <script>
+import userState from "@/data/user.js"; // 引入全局的 userState
+
 export default {
   name: "App",
-  data() {
-    return {
-      isLoggedIn: false, // 登入狀態，初始為未登入
-      showSearch: false, // 控制搜索框的顯示
-      searchQuery: '',   // 搜索框中的文本
-    };
+  setup() {
+    return { userState }; // 通過 provide 將 userState 傳遞給子組件
   },
   methods: {
     logout() {
-      // 模擬登出邏輯
-      this.isLoggedIn = false;
-      alert("You have logged out.");
+      userState.logout();
       this.$router.push("/");
+      alert("You have logged out.");
     },
     toggleSearchInput() {
-      // 切換搜索框顯示
       this.showSearch = !this.showSearch;
     },
     searchEvents() {
-      // 觸發搜索事件，並導航到搜索結果頁面
       if (this.searchQuery) {
-        this.$router.push({ path: '/search', query: { q: this.searchQuery } });
+        this.$router.push({ path: "/search", query: { q: this.searchQuery } });
       }
-    }
+    },
   },
-  mounted() {
-    // 模擬從後端獲取登入狀態
-    const userToken = localStorage.getItem("userToken");
-    if (userToken) {
-      this.isLoggedIn = true;
-    }
+  data() {
+    return {
+      showSearch: false,
+      searchQuery: "",
+    };
   },
 };
 </script>
@@ -134,7 +135,7 @@ body {
 
 .search-input button {
   padding: 5px 10px;
-  background-color: #007bff;
+  background-color: #4CAF50;
   color: white;
   border: none;
   cursor: pointer;

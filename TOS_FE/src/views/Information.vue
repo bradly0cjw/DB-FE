@@ -1,52 +1,53 @@
 <template>
-  <div class="user-information">
-    <h2>用戶基本信息</h2>
-    
-    <!-- 顯示用戶基本信息 -->
-    <div class="user-info">
+  <div class="user-container">
+    <!-- 用戶基本信息 -->
+    <div class="card user-info">
+      <h2>用戶基本信息</h2>
       <p><strong>用戶名：</strong>{{ userInfo.username }}</p>
       <p><strong>電子郵件：</strong>{{ userInfo.email }}</p>
       <p><strong>出生日期：</strong>{{ userInfo.birthDate }}</p>
-      <p><strong>支付信息：</strong>{{ userInfo.paymentInfo }}</p>
     </div>
 
     <!-- 更新用戶信息表單 -->
-    <h3>更新信息</h3>
-    <form @submit.prevent="updateUserInfo">
-      <div>
-        <label for="email">電子郵件：</label>
-        <input type="email" id="email" v-model="updatedUserInfo.email" required />
-      </div>
-      <div>
-        <label for="birthDate">出生日期：</label>
-        <input type="date" id="birthDate" v-model="updatedUserInfo.birthDate" required />
-      </div>
-      <div>
-        <label for="paymentInfo">支付信息：</label>
-        <input type="text" id="paymentInfo" v-model="updatedUserInfo.paymentInfo" required />
-      </div>
-      <button type="submit">更新信息</button>
-    </form>
+    <div class="card user-update">
+      <h2>更新用戶信息</h2>
+      <form @submit.prevent="updateUserInfo">
+        <div class="form-group">
+          <label for="email">電子郵件：</label>
+          <input type="email" id="email" v-model="updatedUserInfo.email" required />
+        </div>
+        <div class="form-group">
+          <label for="birthDate">出生日期：</label>
+          <input type="date" id="birthDate" v-model="updatedUserInfo.birthDate" required />
+        </div>
+        <button type="submit" class="btn">更新資訊</button>
+      </form>
+      <p v-if="updateStatus" :class="updateStatus.success ? 'success' : 'error'">
+        {{ updateStatus.message }}
+      </p>
+    </div>
 
-    <!-- 顯示更新成功或失敗的提示 -->
-    <p v-if="updateStatus" :class="updateStatus.success ? 'success' : 'error'">{{ updateStatus.message }}</p>
-
-    <!-- 顯示優惠券列表 -->
-    <h3>您的優惠券</h3>
-    <ul v-if="coupons.length > 0">
-      <li v-for="coupon in coupons" :key="coupon.id">
-        <p><strong>{{ coupon.discount_code }}</strong> - {{ coupon.description }}</p>
-        <p>折扣類型: {{ coupon.discount_type }}</p>
-        <p>折扣值: {{ coupon.discount_value }}%</p>
-        <p>有效日期: {{ coupon.start_from }} 至 {{ coupon.expired_at }}</p>
-      </li>
-    </ul>
-    <p v-else>您目前沒有優惠券。</p>
+    <!-- 優惠券列表 -->
+    <div class="card user-coupons">
+      <h2>您的優惠券</h2>
+  <!-- 如果優惠券數組為空，顯示提示 -->
+      <ul v-if="coupons.length > 0">
+        <li v-for="coupon in coupons" :key="coupon.id" class="coupon-item">
+          <p><strong>{{ coupon.discount_code }}</strong> - {{ coupon.description }}</p>
+          <p>折扣類型: {{ coupon.discount_type }}</p>
+          <p>折扣值: {{ coupon.discount_value }}%</p>
+          <p>有效日期: {{ coupon.start_from }} 至 {{ coupon.expired_at }}</p>
+        </li>
+      </ul>
+      <p v-else>您目前沒有優惠券。</p>
+    </div>
   </div>
 </template>
 
+
 <script>
 import axios from 'axios';
+import testEvents from '@/data/test.json'; // 引入本地的 test.json 文件
 
 export default {
   data() {
@@ -62,43 +63,62 @@ export default {
         birthDate: '',
         paymentInfo: ''
       },
-      updateStatus: null, 
-      coupons: [] 
+      updateStatus: null,
+      coupons: []
     };
   },
   mounted() {
-    this.fetchUserInfo(); // 頁面加載後獲取用戶信息
-    this.fetchCoupons(); // 獲取用戶的優惠券
+    this.fetchUserInfo();
+    this.fetchCoupons();
   },
   methods: {
     async fetchUserInfo() {
       try {
-        const response = await axios.get('/api/user'); // 替換為API 路徑
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const token = localStorage.getItem('authToken');
+        const response = await axios.get(`${apiUrl}/user`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         this.userInfo = response.data;
         this.updatedUserInfo = { ...this.userInfo };
+
+        // // 改成讀取本地的 test.json 文件
+        // this.userInfo = testEvents[0].tickets[0];
+        // this.updatedUserInfo = { ...this.userInfo };
       } catch (error) {
         console.error('Failed to fetch user info:', error);
       }
     },
-    
     async fetchCoupons() {
       try {
-        const response = await axios.get('/api/coupons'); // 替換為API 路徑
-        this.coupons = response.data;
+        const response = await axios.get('/api/coupons');
+        this.coupons = Array.isArray(response.data) ? response.data : [];
+
+        // 改成讀取本地的 test.json 文件
+        // this.coupons = testEvents.flatMap(event => event.tickets);
       } catch (error) {
         console.error('Failed to fetch coupons:', error);
+        this.coupons = [];
       }
     },
-    
     async updateUserInfo() {
       try {
-        const response = await axios.put('/api/user', this.updatedUserInfo); // 替換為你的 API 路徑
+        const response = await axios.put('/api/user', this.updatedUserInfo);
         if (response.status === 200) {
           this.updateStatus = { success: true, message: '更新成功！' };
           this.userInfo = { ...this.updatedUserInfo };
         } else {
           this.updateStatus = { success: false, message: '更新失敗，請稍後再試。' };
         }
+
+        // 改成本地操作
+        /*
+        this.updateStatus = { success: true, message: '更新成功！' };
+        this.userInfo = { ...this.updatedUserInfo };
+        */
+
       } catch (error) {
         console.error('Failed to update user info:', error);
         this.updateStatus = { success: false, message: '出現錯誤，請稍後再試。' };
@@ -108,45 +128,102 @@ export default {
 };
 </script>
 
+
 <style scoped>
-.user-information {
-  max-width: 600px;
+/* 全局容器樣式 */
+.user-container {
+  max-width: 900px;
   margin: 0 auto;
+  padding: 20px;
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: 1fr; 
 }
 
-form div {
-  margin-bottom: 10px;
+/* 卡片樣式 */
+.card {
+  background-color: #1e1e2f;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  color: #ffffff;
 }
 
-button {
-  background-color: #4CAF50;
-  color: white;
+/* 標題樣式 */
+.card h2 {
+  margin-bottom: 20px;
+  border-bottom: 2px solid #4CAF50;
+  padding-bottom: 10px;
+}
+
+/* 表單樣式 */
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #2b2b3c;
+  color: #fff;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+/* 按鈕樣式 */
+.btn {
+  display: inline-block;
   padding: 10px 20px;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #4CAF50;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
+.btn:hover {
   background-color: #45a049;
 }
 
+/* 成功或錯誤消息樣式 */
 .success {
-  color: green;
+  color: #4CAF50;
+  margin-top: 10px;
 }
 
 .error {
-  color: red;
+  color: #ff4d4d;
+  margin-top: 10px;
 }
 
-ul {
-  list-style-type: none;
+/* 優惠券列表樣式 */
+.user-coupons ul {
+  list-style: none;
+  padding: 0;
 }
 
-li {
-  margin-bottom: 20px;
+.coupon-item {
+  margin-bottom: 15px;
+  padding: 15px;
+  background-color: #2b2b3c;
+  border-radius: 5px;
 }
 
-li p {
+.coupon-item p {
   margin: 5px 0;
 }
 </style>

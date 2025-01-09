@@ -1,4 +1,4 @@
--- DROP DATABASE dbproj;
+DROP DATABASE dbproj;
 -- CREATE DATABASE dbproj;
 CREATE DATABASE if not exists dbproj;
 
@@ -64,6 +64,7 @@ CREATE TABLE tickets (
 
 CREATE TABLE discounts (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
+    code VARCHAR(10) UNIQUE NOT NULL,
     seller_id INTEGER,
     discount_type VARCHAR(50) NOT NULL,
     discount_value DECIMAL(10, 2) NOT NULL,
@@ -108,23 +109,40 @@ CREATE TABLE order_items (
 );
 
 
-INSERT INTO users (username, email, password, created_at)
-VALUES ('admin', 'admin@admin.com', 'admin', NOW());
+INSERT INTO users (id, username, email, password, created_at)
+VALUES (1, 'admin', 'admin@admin.com', '$2a$10$pntkMe6lCT6.KCFqC6OVRumqyWz42NoIyeEJMM4iNeV33rqGhB1vi', '2024-12-29 18:40:02');
+
+INSERT INTO users (id, username, email, password, created_at)
+VALUES (4, 'user1', 'user1@user1.com', '$2a$10$kfwIDrq1qWkwV4NdztCQpuL28QdE7PrsgqC/fKDR9iL/CiG5O/lBm', '2024-12-30 17:10:43');
+INSERT INTO users (id, username, email, password, created_at)
+VALUES (5, 'gary', 'gary@gmail.com', '$2a$10$/uKJxGEgcs7QjAaEVw9a9.g.4SYgbQNUd5xvRgdNyWwq.nzJXdJYC', '2024-12-30 17:12:16');
 
 INSERT INTO admins (user_id)
 VALUES (1);
 
-INSERT INTO users (username, email, password, created_at)
-VALUES ('seller', 'seller@seller.com', 'seller', NOW());
+INSERT INTO users (id,username, email, password, created_at)
+VALUES (2, 'seller', 'seller@seller.com', '$2a$10$.ogu81/hk1Lmq7ypfUO1s.F3.A3mQtMQ/Hn..vDiXpfDxhEJUBtB.', '2024-12-30 08:32:01');
+INSERT INTO users (id,username, email, password, created_at)
+VALUES (3, 'user', 'user@user.com', '$2a$10$iooAYxzs2TU607eSS6eG9OapNp2JGcc8VxNgioPhA91P7h8gKlmNS', '2024-12-30 13:31:06');
 
 INSERT INTO sellers (user_id, company_name)
 VALUES (2, 'seller');
 
 INSERT INTO events (event_name, event_start, event_end, status, description, seller_id)
 VALUES ('event1', '2021-01-01', '2021-01-02', 'active', 'event1 description', 2);
+INSERT INTO events (event_name, event_start, event_end, status, description, seller_id)
+VALUES ('海綿寶寶路跑', '2021-05-01', '2021-08-30', 'active', '好 快跑', 2);
 
 INSERT INTO tickets (event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path)
-VALUES (1, 'ticket1', '2021-01-01', '2021-01-02', 100, 'active', 100, 'ticket1 description', 'ticket1.jpg');
+VALUES (1, 'ticket1', '2021-01-01', '2021-01-02', 100, 'active', 100, 'ticket1 description', 'https://placehold.jp/150x150.png');
+INSERT INTO tickets (event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path)
+VALUES (2, '海綿寶寶路跑 單日卷', '2021-01-01', '2021-01-02', 100, 'active', 1000, '好 快跑 跑一天，可以參加期間內任意一日活動', 'https://placehold.jp/150x150.png');
+
+INSERT INTO tickets (event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path)
+VALUES (2, '海綿寶寶路跑 三日卷', '2021-01-01', '2021-01-04', 250, 'active', 500, '好 快跑 跑三天，可以參加全部三日的活動', 'https://placehold.jp/150x150.png');
+
+INSERT INTO tickets (event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path)
+VALUES (2, '海綿寶寶路跑 飲料兌換卷', '2021-01-01', '2021-01-02', 30, 'active', 5000, '額外飲料兌換', 'https://placehold.jp/150x150.png');
 
 -- list all table
 SELECT * FROM users;

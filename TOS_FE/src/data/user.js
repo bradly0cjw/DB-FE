@@ -1,26 +1,23 @@
-export default {
-    namespaced: true,
-    state: {
-      isLoggedIn: true,  //測試用，上線請改false
-      userInfo: null,
-    },
-    mutations: {
-      setUser(state, userInfo) {
-        state.isLoggedIn = true;
-        state.userInfo = userInfo;
-      },
-      logout(state) {
-        state.isLoggedIn = false;
-        state.userInfo = null;
-      },
-    },
-    actions: {
-      login({ commit }, userInfo) {
-        commit('setUser', userInfo);
-      },
-      logout({ commit }) {
-        commit('logout');
-      },
-    },
-  };
-  
+import { reactive } from "vue";
+
+const userState = reactive({      //下列三個預設應為false，測試可改true免登入
+  isLoggedIn: false,
+  isSeller: false,
+  isAdmin: false,  
+
+  userInfo: null,
+  setUser(userInfo) {
+    this.isLoggedIn = true;
+    this.isSeller = userInfo.role === 'seller';
+    this.isAdmin = userInfo.role === 'admin';
+    this.userInfo = userInfo;
+  },
+  logout() {
+    this.isLoggedIn = false;
+    this.isSeller = false;
+    this.isAdmin = false;
+    this.userInfo = null;
+  },
+});
+
+export default userState;

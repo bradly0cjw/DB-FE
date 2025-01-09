@@ -1,87 +1,217 @@
 <template>
   <div class="login-page">
-    <h1>Login</h1>
-    <form @submit.prevent="handleLogin">
-      <div>
-        <label for="email">Email:</label>
-        <input type="email" v-model="email" id="email" required />
+    <div class="login-header">
+      <h1>Login Portal</h1>
+      <p>Please log in to access your account</p>
+    </div>
+    <div class="login-container">
+      <!-- Unified Login -->
+      <div class="login-card">
+        <h2>Login</h2>
+        <form @submit.prevent="handleLogin">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input
+              type="email"
+              v-model="email"
+              id="email"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              v-model="password"
+              id="password"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          <button type="submit" class="btn">Login</button>
+          <p v-if="error" class="error">{{ error }}</p>
+        </form>
+        <button class="btn register-btn" @click="navigateToRegister">
+          Register
+        </button>
       </div>
-      <div>
-        <label for="password">Password:</label>
-        <input type="password" v-model="password" id="password" required />
-      </div>
-      <button type="submit">Login</button>
-      <p v-if="error" class="error">{{ error }}</p>
-    </form>
+    </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
+import userState from "@/data/user.js";
 
 export default {
   data() {
     return {
       email: "",
       password: "",
-      error: null, // 儲存錯誤訊息
+      error: null,
     };
   },
   methods: {
     async handleLogin() {
       try {
-        const response = await axios.post('/api/login', {
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const response = await axios.post(`${apiUrl}/login`, {
           email: this.email,
           password: this.password,
-        }); // 替換為你的 API 路徑
+        });
 
-        // 假設 API 返回一個 token
-        const { token } = response.data;
+        const { token, role  } = response.data;
+        console.log("Login successful:", token, role );
+        localStorage.setItem("authToken", token);
+        
+        // 更新 user.js 中的狀態
+        userState.setUser({role});
 
-        // 儲存 token（此處使用 localStorage）
-        localStorage.setItem("userToken", token);
-
-        // 更新 App.vue 中的狀態
-        this.$root.isLoggedIn = true;
-
-        // 跳轉到首頁
-        this.$router.push("/");
+        // 根據 userType 跳轉
+        if (role  === "user") {
+          this.$router.push("/");
+        } else if (role  === "seller") {
+          this.$router.push("/seller/dashboard");
+        } 
+        else if (role  === "admin") {
+          this.$router.push("/admin");
+        }else {
+          this.error = "Unknown user type.";
+        }
       } catch (error) {
-        console.error('Failed to login:', error);
-        this.error = 'Invalid email or password. Please try again.';
+        console.error("Login failed:", error);
+        this.error = "Invalid email or password. Please try again.";
       }
+      console.log(userState);
+    },
+    navigateToRegister() {
+      this.$router.push("/register");
     },
   },
 };
 </script>
 
 <style scoped>
+/* 整體頁面設計 */
 .login-page {
-  max-width: 400px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #2b2b2b;
+  color: #e0e0e0;
+  font-family: 'Arial', sans-serif;
   padding: 20px;
-  border: 1px solid #ccc;
+}
+
+/* 頁面標題 */
+.login-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.login-header h1 {
+  font-size: 72px;
+  color: #ffffff;
+}
+
+.login-header p {
+  font-size: 16px;
+  color: #bbbbbb;
+}
+
+/* 登入容器 */
+.login-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 50px;
+  width: 100%;
+  max-width: 1500px;
+}
+
+/* 登入卡片 */
+.login-card {
+  background-color: #3c3c3c;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+}
+
+.login-card h2 {
+  margin-bottom: 36px;
+  font-size: 24px;
+  color: #ffffff;
+}
+
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #bbbbbb;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #555555;
   border-radius: 5px;
+  background-color: #2b2b2b;
+  color: #e0e0e0;
+  box-sizing: border-box;
 }
 
-form div {
-  margin-bottom: 15px;
+.form-group input::placeholder {
+  color: #888888;
 }
 
-button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
+.form-group input:focus {
+  border-color: #888888;
+  outline: none;
+}
+
+/* 按鈕樣式 */
+.btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #4CAF50;
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+  transition: all 0.3s;
 }
 
-button:hover {
-  background-color: #0056b3;
+.btn:hover {
+  background-color: #666666;
 }
 
+/* 錯誤消息 */
 .error {
-  color: red;
+  color: #ff4d4d;
   margin-top: 10px;
+  font-size: 14px;
+}
+
+.register-btn {
+  margin-top: 20px;
+  background-color: #2196F3;
+}
+.register-btn:hover {
+  background-color: #0b7dda;
 }
 </style>
