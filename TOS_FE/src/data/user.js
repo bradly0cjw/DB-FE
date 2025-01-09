@@ -8,8 +8,8 @@ const userState = reactive({      //下列三個預設應為false，測試可改
   userInfo: null,
   setUser(userInfo) {
     this.isLoggedIn = true;
-    this.isSeller = userInfo.isSeller || false;
-    this.isAdmin = userInfo.isAdmin || false;
+    this.isSeller = userInfo.role === 'seller';
+    this.isAdmin = userInfo.role === 'admin';
     this.userInfo = userInfo;
   },
   logout() {

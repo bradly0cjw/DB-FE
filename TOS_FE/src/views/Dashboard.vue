@@ -1,10 +1,11 @@
 <template> 
   <div class="dashboard-container">
-    <!-- 活動管理區 -->
+    <!--
+    活動管理區
     <div class="card event-management">
       <h2>活動管理</h2>
 
-      <!-- 新增/修改活動表單 -->
+      新增/修改活動表單
       <form @submit.prevent="submitEvent">
         <div class="form-group">
           <label for="eventName">活動名稱：</label>
@@ -21,7 +22,7 @@
         <button type="submit" class="btn">提交活動</button>
       </form>
 
-      <!-- 已建立的活動列表 -->
+      已建立的活動列表
       <div v-if="events.length > 0">
         <h3>已建立的活動</h3>
         <ul>
@@ -46,7 +47,7 @@
         <p>無已建立的活動</p>
       </div>
     </div>
-
+  -->
     <!-- 優惠券管理區 -->
     <div class="card coupon-management">
       <h2>優惠券管理</h2>
@@ -127,80 +128,80 @@ export default {
     };
   },
   mounted() {
-    this.fetchEvents();
+    // this.fetchEvents();
     this.fetchCoupons();
   },
   methods: {
     async fetchEvents() {
       try {
-        // const apiUrl = process.env.VUE_APP_API_URL;
-        // const response = await axios.get(`${apiUrl}/events`);
-        // this.events = response.data;
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const response = await axios.get(`${apiUrl}/events`);
+        this.events = response.data;
 
         // 改成讀取本地的 test.json 文件
-        this.events = testEvents;
+        // this.events = testEvents;
       } catch (error) {
         console.error("Failed to fetch events:", error);
       }
     },
     async fetchCoupons() {
       try {
-        // const apiUrl = process.env.VUE_APP_API_URL;
-        // const response = await axios.get(`${apiUrl}/coupons`);
-        // this.coupons = response.data;
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const response = await axios.get(`${apiUrl}/coupons`);
+        this.coupons = response.data;
 
         // 改成讀取本地的 test.json 文件
-        this.coupons = testEvents.flatMap(event => event.tickets);
+        // this.coupons = testEvents.flatMap(event => event.tickets);
       } catch (error) {
         console.error("Failed to fetch coupons:", error);
       }
     },
     async submitEvent() {
       try {
-        // const apiUrl = process.env.VUE_APP_API_URL;
-        // if (this.eventForm.id) {
-        //   await axios.put(`${apiUrl}/events/${this.eventForm.id}`, this.eventForm);
-        // } else {
-        //   await axios.post(`${apiUrl}/events`, this.eventForm);
-        // }
-        // this.fetchEvents();
-        // this.eventForm = { id: null, name: '', date: '', description: '' };
+        const apiUrl = process.env.VUE_APP_API_URL;
+        if (this.eventForm.id) {
+          await axios.put(`${apiUrl}/events/${this.eventForm.id}`, this.eventForm);
+        } else {
+          await axios.post(`${apiUrl}/events`, this.eventForm);
+        }
+        this.fetchEvents();
+        this.eventForm = { id: null, name: '', date: '', description: '' };
 
         // 改成本地操作
-        if (this.eventForm.id) {
-          const index = this.events.findIndex(event => event.id === this.eventForm.id);
-          if (index !== -1) {
-            this.events.splice(index, 1, { ...this.eventForm });
-          }
-        } else {
-          this.events.push({ ...this.eventForm, id: Date.now() });
-        }
-        this.eventForm = { id: null, name: '', date: '', description: '' };
+        // if (this.eventForm.id) {
+        //   const index = this.events.findIndex(event => event.id === this.eventForm.id);
+        //   if (index !== -1) {
+        //     this.events.splice(index, 1, { ...this.eventForm });
+        //   }
+        // } else {
+        //   this.events.push({ ...this.eventForm, id: Date.now() });
+        // }
+        // this.eventForm = { id: null, name: '', date: '', description: '' };
       } catch (error) {
         console.error("Failed to submit event:", error);
       }
     },
     async submitCoupon() {
       try {
-        // const apiUrl = process.env.VUE_APP_API_URL;
-        // if (this.couponForm.id) {
-        //   await axios.put(`${apiUrl}/coupons/${this.couponForm.id}`, this.couponForm);
-        // } else {
-        //   await axios.post(`${apiUrl}/coupons`, this.couponForm);
-        // }
-        // this.fetchCoupons();
-        // this.couponForm = { id: null, code: '', discount: '', type: 'total', expiration: '' };
+        const apiUrl = process.env.VUE_APP_API_URL;
+        if (this.couponForm.id) {
+          await axios.put(`${apiUrl}/coupons/${this.couponForm.id}`, this.couponForm);
+        } else {
+          await axios.post(`${apiUrl}/coupons`, this.couponForm);
+        }
+        this.fetchCoupons();
+        this.couponForm = { id: null, code: '', discount: '', type: 'total', expiration: '' };
 
         // 改成本地操作
-        if (this.couponForm.id) {
-          const index = this.coupons.findIndex(coupon => coupon.id === this.couponForm.id);
-          if (index !== -1) {
-            this.coupons.splice(index, 1, { ...this.couponForm });
-          }
-        } else {
-          this.coupons.push({ ...this.couponForm, id: Date.now() });
-        }
-        this.couponForm = { id: null, code: '', discount: '', type: 'total', expiration: '' };
+        // if (this.couponForm.id) {
+        //   const index = this.coupons.findIndex(coupon => coupon.id === this.couponForm.id);
+        //   if (index !== -1) {
+        //     this.coupons.splice(index, 1, { ...this.couponForm });
+        //   }
+        // } else {
+        //   this.coupons.push({ ...this.couponForm, id: Date.now() });
+        // }
+        // this.couponForm = { id: null, code: '', discount: '', type: 'total', expiration: '' };
       } catch (error) {
         console.error("Failed to submit coupon:", error);
       }

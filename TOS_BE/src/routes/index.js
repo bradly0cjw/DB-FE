@@ -1,7 +1,9 @@
 const express = require('express');
-const { createUser, getUserByToken, getUsers, deleteUser, loginUser } = require('../controllers/user_controller');
-const { getEvents, createEvent, updateEvent, deleteEvent, searchEvents, getTicketsByEvent, getEvent, createTicket } = require('../controllers/event_controller');
+const { createUser, getUserByToken, getUsers, deleteUser, loginUser, getUserList, getSellerList, updateUser } = require('../controllers/user_controller');
+const { getEvents, createEvent, updateEvent, deleteEvent, searchEvents, getTicketsByEvent, getEvent} = require('../controllers/event_controller');
 const { getCoupons, createCoupon, updateCoupon, deleteCoupon } = require('../controllers/coupon_controller');
+const { createTicket, updateTicket,deleteTicket,getTicketByID } = require('../controllers/ticket_controller');
+
 
 const router = express.Router();
 
@@ -17,6 +19,29 @@ const router = express.Router();
 router.get('/ping', (req, res) => {
   res.send('pong');
 });
+
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     summary: Logs in a user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/LoginRequest'
+ *     responses:
+ *       200:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/LoginResponse'
+ *       401:
+ *         description: Invalid email or password
+ */
+router.post('/login', loginUser);
 
 /**
  * @swagger
@@ -71,6 +96,43 @@ router.post('/users', createUser);
  */
 router.get('/user', getUserByToken);
 
+router.get('/users/sellers', getSellerList);
+
+router.get('/users/users', getUserList);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Updates a user by ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The user ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       404:
+ *         description: User not found
+ */
+router.put('/users/:id', updateUser);
+
 /**
  * @swagger
  * /users/{id}:
@@ -107,7 +169,6 @@ router.delete('/users/:id', deleteUser);
  *                 $ref: '#/components/schemas/Event'
  */
 router.get('/events', getEvents);
-
 
 router.get('/events/search', searchEvents);
 
@@ -159,76 +220,24 @@ router.get('/events/:eventId/tickets', getTicketsByEvent);
 /**
  * @swagger
  * /events/{eventId}:
- *  get:
- *   summary: Get an event by ID
- *  parameters:
- *   - in: path
- *    name: eventId
- *   required: true
- *  schema:
- *  type: integer
- * description: The event ID
- * responses:
- * 200:
- * description: An event
- * content:
- * application/json:
- * schema:
- * $ref: '#/components/schemas/Event'
- */
-
-router.get('/event/:eventId', getEvent);
-/**
- * @swagger
- * /tickets:
- *   post:
- *     summary: Creates a new ticket
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/Ticket'
- *     responses:
- *       201:
- *         description: Ticket created successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Ticket'
- */
-router.post('/tickets', createTicket);
-
-/**
- * @swagger
- * /login:
- *   post:
- *     summary: Logs in a user
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *               password:
- *                 type: string
+ *   get:
+ *     summary: Get an event by ID
+ *     parameters:
+ *       - in: path
+ *         name: eventId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The event ID
  *     responses:
  *       200:
- *         description: Login successful
+ *         description: An event
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 token:
- *                   type: string
- *       401:
- *         description: Invalid email or password
+ *               $ref: '#/components/schemas/Event'
  */
-router.post('/login', loginUser);
+router.get('/event/:eventId', getEvent);
 
 /**
  * @swagger
@@ -279,6 +288,27 @@ router.put('/events/:id', updateEvent);
  *         description: Event not found
  */
 router.delete('/events/:id', deleteEvent);
+
+/**
+ * @swagger
+ * /tickets:
+ *   post:
+ *     summary: Creates a new ticket
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Ticket'
+ *     responses:
+ *       201:
+ *         description: Ticket created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Ticket'
+ */
+router.post('/tickets', createTicket);
 
 /**
  * @swagger
@@ -368,5 +398,9 @@ router.put('/coupons/:id', updateCoupon);
  */
 router.delete('/coupons/:id', deleteCoupon);
 
+router.post('/tickets', createTicket);
+router.put('/tickets/:id', updateTicket);
+router.delete('/tickets/:id', deleteTicket);
+router.get('/tickets/:id', getTicketByID);
 
 module.exports = router;

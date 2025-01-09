@@ -87,33 +87,17 @@ const getEvent = async (req, res) => {
     const { eventId } = req.params;
     try {
         const [rows] = await pool.query('SELECT * FROM events WHERE id = ?', [eventId]);
+        //get image path from event_image table
+        const [image] = await pool.query('SELECT image_path FROM events_images WHERE event_id = ?', [eventId]);
+        //add multiple image path to the response
+        rows[0].image_path = image.map((img) => img.image_path);
         res.json(rows[0]);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 }
 
-const createTicket = async (req, res) => {
-    const { event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path } = req.body;
 
-    const connection = await pool.getConnection();
-    try {
-        await connection.beginTransaction();
-
-        const [result] = await connection.query(
-            'INSERT INTO tickets (event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path]
-        );
-
-        await connection.commit();
-        res.status(201).json({ id: result.insertId, event_id, ticket_name, ticket_start, ticket_end, price, status, quantity, description, image_path });
-    } catch (error) {
-        await connection.rollback();
-        res.status(500).json({ error: error.message });
-    } finally {
-        connection.release();
-    }
-};
 
 const searchEvents = async (req, res) => {
     const { q } = req.query;
@@ -126,6 +110,6 @@ const searchEvents = async (req, res) => {
 };
 
 module.exports = {
-    getEvents, createEvent, getTicketsByEvent, getEvent, createTicket, searchEvents,
+    getEvents, createEvent, getTicketsByEvent, getEvent, searchEvents,
     updateEvent, deleteEvent
 };

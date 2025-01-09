@@ -3,6 +3,15 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const debug = false;
 
+const hashPassword = (password, createdAt) => {
+  if (!debug) {
+    const salt = bcrypt.genSaltSync(10);
+    return bcrypt.hashSync(password + createdAt, salt);
+  } else {
+    return password;
+  }
+};
+
 const createUser = async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -13,14 +22,9 @@ const createUser = async (req, res) => {
     // Get the current time
     const createdAt = new Date();
 
-    let finalPassword;
-    if (!debug) {
-      // Salt the password with created_at
-      const salt = bcrypt.genSaltSync(10);
-      finalPassword = bcrypt.hashSync(password + createdAt, salt);
-    } else {
-      finalPassword = password;
-    }
+    // Hash the password
+    const finalPassword = hashPassword(password, createdAt);
+
 
     // Insert user
     const [result] = await connection.query(
@@ -119,9 +123,67 @@ const loginUser = async (req, res) => {
     role = sellerRows.length > 0 ? 'seller' : role;
 
     const token = jwt.sign({ id: user.id, role: role }, jwtSecret, { expiresIn: '1h' });
-    res.json({ token , role });
+    res.json({ token, role });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+const getUserList = async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT * FROM users 
+      WHERE id NOT IN (SELECT user_id FROM sellers) 
+      AND id NOT IN (SELECT user_id FROM admins)
+    `);
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getSellerList = async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT * FROM users 
+      WHERE id IN (SELECT user_id FROM sellers)
+    `);
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+const updateUser = async (req, res) => {
+  const { id } = req.params;
+  const { username, email, password } = req.body;
+
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+
+    const [user] = await connection.query('SELECT * FROM users WHERE id = ?', [id]);
+    if (user.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const updatedUser = {
+      username: username || user[0].username,
+      email: email || user[0].email,
+      password: password ? hashPassword(password, user[0].created_at) : user[0].password,
+    };
+
+    await connection.query(
+      'UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?',
+      [updatedUser.username, updatedUser.email, updatedUser.password, id]
+    );
+
+    await connection.commit();
+    res.json({ message: 'User updated successfully' });
+  } catch (error) {
+    await connection.rollback();
+    res.status(500).json({ error: error.message });
+  } finally {
+    connection.release();
   }
 };
 
@@ -130,5 +192,8 @@ module.exports = {
   getUsers,
   deleteUser,
   loginUser,
-  getUserByToken
+  getUserByToken,
+  getUserList,
+  getSellerList,
+  updateUser,
 };

@@ -6,12 +6,12 @@
       <p class="card-text">{{ event.description || 'No description available.' }}</p>
       <div class="d-flex justify-content-between">
         <button class="btn btn-primary" @click="goToDetail">Detail</button>
+        <button v-if="isSeller" class="btn btn-warning" @click="editEvent">Edit</button>
+        <button v-if="isSeller" class="btn btn-danger" @click="deleteEvent">Delete</button>
       </div>
     </div>
   </div>
 </template>
-
-
 
 <style scoped>
 .event-card {
@@ -51,15 +51,27 @@ export default {
         id : '',
         image_path: '',
         event_name: '',
+        event_start: new Date().toISOString().slice(0, 16),
+        event_end: new Date().toISOString().slice(0, 16),
         description: ''
       })
     },
-    
+    isSeller: {
+      type: Boolean,
+      required: true,
+    }
+  },
+  methods: {
+    goToDetail() {
+      this.$router.push({ name: 'TicketDetail', params: { id: this.event.id } });
+      console.log(this.event);
     },
-    methods: {
-      goToDetail() {
-        this.$router.push({ name: 'TicketDetail', params: { id: this.event.id } });
-      },
+    editEvent() {
+      this.$emit('editEvent', this.event);
+    },
+    deleteEvent() {
+      this.$emit('deleteEvent', this.event.id);
+    },
   },
 };
 </script>

@@ -11,8 +11,8 @@
       <div v-else>
         <div class="mb-5">
           <h2>Users</h2>
-          <table class="table table-bordered table-hover">
-            <thead class="table-dark">
+          <table class="table table-bordered table-hover ">
+            <thead class="table-dark table-bordered border-white">
               <tr>
                 <th>ID</th>
                 <th>Created At</th>
@@ -41,7 +41,7 @@
         <div>
           <h2>Sellers</h2>
           <table class="table table-bordered table-hover">
-            <thead class="table-dark">
+            <thead class="table-dark table-bordered border-white">
               <tr>
                 <th>ID</th>
                 <th>Created At</th>
@@ -86,13 +86,15 @@ export default {
   methods: {
     async fetchUsers() {
       try {
-        // const response = await axios.get('/api/users'); // 替換為你的 API 路徑
-        // this.users = Array.isArray(response.data) ? response.data : [];
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const response = await axios.get(`${apiUrl}/users/users`); // 替換為你的 API 路徑
+        this.users = Array.isArray(response.data) ? response.data : [];
 
         // 改成讀取本地的 test.json 文件
-        this.users = testEvents.flatMap(event => event.tickets);
+        // this.users = testEvents.flatMap(event => event.tickets);
       } catch (error) {
         console.error('Failed to fetch users:', error);
+        alert('Failed to fetch users');
         this.users = [];
       } finally {
         this.loadingUsers = false;
@@ -100,64 +102,98 @@ export default {
     },
     async fetchSellers() {
       try {
-        // const response = await axios.get('/api/sellers'); // 替換為你的 API 路徑
-        // this.sellers = Array.isArray(response.data) ? response.data : [];
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const response = await axios.get(`${apiUrl}/users/sellers`); // 替換為你的 API 路徑
+        this.sellers = Array.isArray(response.data) ? response.data : [];
 
         // 改成讀取本地的 test.json 文件
-        this.sellers = testEvents.flatMap(event => event.tickets);
+        // this.sellers = testEvents.flatMap(event => event.tickets);
       } catch (error) {
         console.error('Failed to fetch sellers:', error);
+        alert('Failed to fetch sellers');
         this.sellers = [];
       } finally {
         this.loadingSellers = false;
       }
     },
     updateUser(user) {
-      // axios.put(`/api/users/${user.id}`, user)
-      //   .then(response => {
-      //     console.log("User updated successfully:", response.data);
-      //   })
-      //   .catch(error => {
-      //     console.error("There was an error updating the user:", error);
-      //   });
+      const apiUrl = process.env.VUE_APP_API_URL;
+      const originalUser = this.originalUsers.find(u => u.id === user.id);
+      const updatedFields = {};
 
-      // 改成本地操作
-      console.log("User updated successfully:", user);
-    },
-    deleteUser(userId) {
-      // axios.delete(`/api/users/${userId}`)
-      //   .then(response => {
-      //     this.users = this.users.filter(user => user.id !== userId);
-      //     console.log("User deleted successfully:", response.data);
-      //   })
-      //   .catch(error => {
-      //     console.error("There was an error deleting the user:", error);
-      //   });
+      // 只發送更改的部分
+      for (const key in user) {
+        if (user[key] !== originalUser[key]) {
+          updatedFields[key] = user[key];
+        }
+      }
 
-      // 改成本地操作
-      this.users = this.users.filter(user => user.id !== userId);
-      console.log("User deleted successfully:", userId);
-    },
-    updateSeller(seller) {
-      axios.put(`/api/sellers/${seller.id}`, seller)
+      axios.put(`${apiUrl}/users/${user.id}`, updatedFields)
         .then(response => {
-          console.log("Seller updated successfully:", response.data);
+          console.log("User updated successfully:", response.data);
+          alert("User updated successfully");
         })
         .catch(error => {
-          console.error("There was an error updating the seller:", error);
+          console.error("There was an error updating the user:", error);
+          alert("There was an error updating the user");
         });
 
       // 改成本地操作
-      //console.log("Seller updated successfully:", seller);
+      // console.log("User updated successfully:", user);
+    },
+    deleteUser(userId) {
+      const apiUrl = process.env.VUE_APP_API_URL;
+      axios.delete(`${apiUrl}/users/${userId}`)
+        .then(response => {
+          this.users = this.users.filter(user => user.id !== userId);
+          console.log("User deleted successfully:", response.data);
+          alert("User deleted successfully");
+        })
+        .catch(error => {
+          console.error("There was an error deleting the user:", error);
+          alert("There was an error deleting the user");
+        });
+
+      // // 改成本地操作
+      // this.users = this.users.filter(user => user.id !== userId);
+      // console.log("User deleted successfully:", userId);
+    },
+    updateSeller(seller) {
+      const apiUrl = process.env.VUE_APP_API_URL;
+      const originalSeller = this.originalSellers.find(s => s.id === seller.id);
+      const updatedFields = {};
+
+      // 只發送更改的部分
+      for (const key in seller) {
+        if (seller[key] !== originalSeller[key]) {
+          updatedFields[key] = seller[key];
+        }
+      }
+
+      axios.put(`${apiUrl}/users/${seller.id}`, updatedFields)
+        .then(response => {
+          console.log("Seller updated successfully:", response.data);
+          alert("Seller updated successfully");
+        })
+        .catch(error => {
+          console.error("There was an error updating the seller:", error);
+          alert("There was an error updating the seller");
+        });
+
+      // 改成本地操作
+      // console.log("Seller updated successfully:", seller);
     },
     deleteSeller(sellerId) {
-      axios.delete(`/api/sellers/${sellerId}`)
+      const apiUrl = process.env.VUE_APP_API_URL;
+      axios.delete(`${apiUrl}/users/${sellerId}`)
         .then(response => {
           this.sellers = this.sellers.filter(seller => seller.id !== sellerId);
           console.log("Seller deleted successfully:", response.data);
+          alert("Seller deleted successfully:", response.data);
         })
         .catch(error => {
           console.error("There was an error deleting the seller:", error);
+          alert("There was an error deleting the seller");
         });
 
       // 改成本地操作
@@ -188,7 +224,11 @@ export default {
   table {
     width: 100%;
   }
-  
+
+  table tr:hover {
+  background-color: #757272; /* Change this color to your desired hover color */
+}
+
   .btn-sm {
     margin-right: 5px;
   }
@@ -198,5 +238,7 @@ export default {
     font-weight: bold;
     text-align: center;
   }
+
+
   </style>
   

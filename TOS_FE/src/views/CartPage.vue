@@ -8,9 +8,9 @@
     <!-- 當 cartItems 有內容時顯示購物車項目 -->
     <div v-else class="cart-items">
       <div v-for="item in cartItems" :key="item.id" class="cart-item">
-        <img :src="item.image" :alt="item.name" class="item-image" />
+        <img :src="item.image_path" :alt="item.ticket_name" class="item-image" />
         <div class="item-details">
-          <h4 class="item-name">{{ item.name }}</h4>
+          <h4 class="item-name">{{ item.ticket_name }}</h4>
           <p class="item-description">{{ item.description }}</p>
           <p class="item-quantity">Quantity: {{ item.quantity }}</p>
           <button @click="removeFromCart(item.id)" class="remove-button">Remove</button>
@@ -22,7 +22,6 @@
 
 <script>
 import axios from 'axios';
-import testEvents from '@/data/test.json'; // 引入本地的 test.json 文件
 
 export default {
   data() {
@@ -41,13 +40,12 @@ export default {
         const cartItems = await Promise.all(
           cart.map(async (ticketId) => {
             const response = await axios.get(`${apiUrl}/tickets/${ticketId}`);
+            console.log('Fetched ticket:', response.data); // Log the fetched ticket data
             return response.data;
           })
         );
         this.cartItems = cartItems;
-
-        // 改成讀取本地的 test.json 文件
-        //this.cartItems = testEvents.flatMap(event => event.tickets);
+         // Log the cart items
       } catch (error) {
         console.error('Failed to fetch cart items:', error);
         this.cartItems = [];

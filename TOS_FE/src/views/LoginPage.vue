@@ -42,6 +42,7 @@
 
 <script>
 import axios from "axios";
+import userState from "@/data/user.js";
 
 export default {
   data() {
@@ -65,7 +66,7 @@ export default {
         localStorage.setItem("authToken", token);
         
         // 更新 user.js 中的狀態
-        userState.setUser(userInfo);
+        userState.setUser({role});
 
         // 根據 userType 跳轉
         if (role  === "user") {
@@ -82,6 +83,7 @@ export default {
         console.error("Login failed:", error);
         this.error = "Invalid email or password. Please try again.";
       }
+      console.log(userState);
     },
     navigateToRegister() {
       this.$router.push("/register");

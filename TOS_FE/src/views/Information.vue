@@ -74,30 +74,30 @@ export default {
   methods: {
     async fetchUserInfo() {
       try {
-        // const apiUrl = process.env.VUE_APP_API_URL;
-        // const token = localStorage.getItem('authToken');
-        // const response = await axios.get(`${apiUrl}/user`, {
-        //   headers: {
-        //     Authorization: `Bearer ${token}`
-        //   }
-        // });
-        // this.userInfo = response.data;
-        // this.updatedUserInfo = { ...this.userInfo };
-
-        // 改成讀取本地的 test.json 文件
-        this.userInfo = testEvents[0].tickets[0];
+        const apiUrl = process.env.VUE_APP_API_URL;
+        const token = localStorage.getItem('authToken');
+        const response = await axios.get(`${apiUrl}/user`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        this.userInfo = response.data;
         this.updatedUserInfo = { ...this.userInfo };
+
+        // // 改成讀取本地的 test.json 文件
+        // this.userInfo = testEvents[0].tickets[0];
+        // this.updatedUserInfo = { ...this.userInfo };
       } catch (error) {
         console.error('Failed to fetch user info:', error);
       }
     },
     async fetchCoupons() {
       try {
-        // const response = await axios.get('/api/coupons');
-        // this.coupons = Array.isArray(response.data) ? response.data : [];
+        const response = await axios.get('/api/coupons');
+        this.coupons = Array.isArray(response.data) ? response.data : [];
 
         // 改成讀取本地的 test.json 文件
-        this.coupons = testEvents.flatMap(event => event.tickets);
+        // this.coupons = testEvents.flatMap(event => event.tickets);
       } catch (error) {
         console.error('Failed to fetch coupons:', error);
         this.coupons = [];
